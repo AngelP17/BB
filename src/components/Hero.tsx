@@ -1,8 +1,34 @@
-import { useState, useEffect, useRef } from 'react';
-import { Heart, BookOpen, Users, Globe, ArrowDown, Sparkles, Star } from 'lucide-react';
+import { useState, useEffect, useRef, useMemo } from 'react';
+import { Heart, BookOpen, Users, Globe, ArrowDown, Sparkles, Star, Play } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 
-// Animated counter hook
+// Typing effect hook
+function useTypingEffect(text: string, speed: number = 50, startDelay: number = 500) {
+  const [displayedText, setDisplayedText] = useState('');
+  const [isComplete, setIsComplete] = useState(false);
+
+  useEffect(() => {
+    let timeout: NodeJS.Timeout;
+    let charIndex = 0;
+
+    const startTyping = () => {
+      if (charIndex < text.length) {
+        setDisplayedText(text.slice(0, charIndex + 1));
+        charIndex++;
+        timeout = setTimeout(startTyping, speed);
+      } else {
+        setIsComplete(true);
+      }
+    };
+
+    timeout = setTimeout(startTyping, startDelay);
+    return () => clearTimeout(timeout);
+  }, [text, speed, startDelay]);
+
+  return { displayedText, isComplete };
+}
+
+// Animated counter hook with intersection observer
 function useCountUp(end: number, duration: number = 2000, startOnView: boolean = true) {
   const [count, setCount] = useState(0);
   const [hasStarted, setHasStarted] = useState(false);
@@ -56,42 +82,81 @@ function useCountUp(end: number, duration: number = 2000, startOnView: boolean =
   return { count, ref };
 }
 
+// Parallax scroll hook
+function useParallax(speed: number = 0.5) {
+  const [offset, setOffset] = useState(0);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (ref.current) {
+        const rect = ref.current.getBoundingClientRect();
+        const scrollProgress = (window.innerHeight - rect.top) / (window.innerHeight + rect.height);
+        setOffset(scrollProgress * 100 * speed);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [speed]);
+
+  return { offset, ref };
+}
+
 export function Hero() {
+  const heroText = "Every Child Deserves the Magic of Reading";
+  const { displayedText, isComplete } = useTypingEffect(heroText, 40, 800);
+  const { offset, ref: parallaxRef } = useParallax(0.3);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     element?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const stats = [
-    { icon: BookOpen, value: 55000, suffix: '+', label: 'Books Distributed', color: 'text-sunset-orange' },
-    { icon: Globe, value: 50, suffix: '+', label: 'States Reached', color: 'text-sky-blue' },
-    { icon: Users, value: 13000, suffix: '+', label: 'Children Helped', color: 'text-forest-green' },
-  ];
+  const stats = useMemo(() => [
+    { icon: BookOpen, value: 55000, suffix: '+', label: 'Books Distributed', color: 'text-sunset-orange', bgColor: 'bg-sunset-orange/10' },
+    { icon: Globe, value: 50, suffix: '+', label: 'States Reached', color: 'text-sky-blue', bgColor: 'bg-sky-blue/10' },
+    { icon: Users, value: 13000, suffix: '+', label: 'Children Helped', color: 'text-forest-green', bgColor: 'bg-forest-green/10' },
+  ], []);
 
   return (
     <section id="hero" className="relative min-h-screen flex items-center overflow-hidden bg-gradient-to-br from-orange-50 via-rose-50 to-purple-50">
-      {/* Animated Background Elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Gradient Orbs */}
-        <div className="blob blob-orange w-[600px] h-[600px] -top-40 -left-40 animate-float-slow" />
-        <div className="blob blob-pink w-[500px] h-[500px] top-1/2 -right-40 animate-float-slow animation-delay-200" />
-        <div className="blob blob-yellow w-[400px] h-[400px] bottom-0 left-1/3 animate-float-slow animation-delay-400" />
+      {/* Animated Background Elements with Parallax */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none" ref={parallaxRef}>
+        {/* Gradient Orbs with parallax */}
+        <div
+          className="blob blob-orange w-[600px] h-[600px] -top-40 -left-40 animate-float-slow"
+          style={{ transform: `translateY(${offset * 0.5}px)` }}
+        />
+        <div
+          className="blob blob-pink w-[500px] h-[500px] top-1/2 -right-40 animate-float-slow animation-delay-200"
+          style={{ transform: `translateY(${offset * 0.3}px)` }}
+        />
+        <div
+          className="blob blob-yellow w-[400px] h-[400px] bottom-0 left-1/3 animate-float-slow animation-delay-400"
+          style={{ transform: `translateY(${-offset * 0.4}px)` }}
+        />
 
         {/* Floating Books Decoration */}
-        <div className="absolute top-32 right-[15%] animate-float animation-delay-100">
-          <div className="w-16 h-20 bg-gradient-to-br from-sunset-orange to-sunset-coral rounded-lg shadow-xl rotate-12 opacity-20" />
+        <div className="absolute top-32 right-[15%] animate-float animation-delay-100" style={{ transform: `translateY(${offset * 0.6}px)` }}>
+          <div className="w-16 h-20 bg-gradient-to-br from-sunset-orange to-sunset-coral rounded-lg shadow-xl rotate-12 opacity-30" />
         </div>
-        <div className="absolute bottom-40 left-[10%] animate-float animation-delay-300">
-          <div className="w-12 h-16 bg-gradient-to-br from-sky-blue to-ocean-teal rounded-lg shadow-xl -rotate-6 opacity-20" />
+        <div className="absolute bottom-40 left-[10%] animate-float animation-delay-300" style={{ transform: `translateY(${-offset * 0.5}px)` }}>
+          <div className="w-12 h-16 bg-gradient-to-br from-sky-blue to-ocean-teal rounded-lg shadow-xl -rotate-6 opacity-30" />
         </div>
-        <div className="absolute top-1/2 left-[5%] animate-float animation-delay-500">
-          <div className="w-10 h-14 bg-gradient-to-br from-golden-yellow to-warm-amber rounded-lg shadow-xl rotate-3 opacity-15" />
+        <div className="absolute top-1/2 left-[5%] animate-float animation-delay-500" style={{ transform: `translateY(${offset * 0.4}px)` }}>
+          <div className="w-10 h-14 bg-gradient-to-br from-golden-yellow to-warm-amber rounded-lg shadow-xl rotate-3 opacity-25" />
+        </div>
+        <div className="absolute top-[40%] right-[8%] animate-float animation-delay-700" style={{ transform: `translateY(${-offset * 0.3}px)` }}>
+          <div className="w-14 h-18 bg-gradient-to-br from-mountain-purple to-sunset-pink rounded-lg shadow-xl -rotate-12 opacity-20" />
         </div>
 
         {/* Sparkle Elements */}
         <Star className="absolute top-[20%] right-[25%] w-4 h-4 text-golden-yellow animate-sparkle" fill="currentColor" />
         <Star className="absolute top-[60%] right-[10%] w-3 h-3 text-sunset-orange animate-sparkle animation-delay-200" fill="currentColor" />
         <Star className="absolute bottom-[30%] left-[20%] w-5 h-5 text-sunset-pink animate-sparkle animation-delay-400" fill="currentColor" />
+        <Star className="absolute top-[15%] left-[30%] w-3 h-3 text-forest-green animate-sparkle animation-delay-600" fill="currentColor" />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-20">
@@ -107,15 +172,21 @@ export function Hero() {
               <span className="text-sm font-medium text-warm-gray-700">501(c)(3) Nonprofit Organization</span>
             </div>
 
-            {/* Main Headline */}
+            {/* Main Headline with Typing Effect */}
             <div className="space-y-4 animate-fade-in-up animation-delay-100">
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-warm-gray-900 leading-[1.1]">
-                Every Child Deserves the{' '}
-                <span className="relative inline-block">
-                  <span className="text-gradient">Magic</span>
-                  <Sparkles className="absolute -top-2 -right-6 w-6 h-6 text-golden-yellow animate-sparkle" />
-                </span>{' '}
-                of Reading
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-warm-gray-900 leading-[1.1] min-h-[1.2em]">
+                {displayedText.split('Magic').map((part, index) => (
+                  <span key={index}>
+                    {index > 0 && (
+                      <span className="relative inline-block">
+                        <span className="text-gradient">Magic</span>
+                        <Sparkles className={`absolute -top-2 -right-6 w-6 h-6 text-golden-yellow transition-opacity duration-500 ${isComplete ? 'opacity-100 animate-sparkle' : 'opacity-0'}`} />
+                      </span>
+                    )}
+                    {part}
+                  </span>
+                ))}
+                {!isComplete && <span className="animate-pulse">|</span>}
               </h1>
               <p className="text-lg sm:text-xl text-warm-gray-600 max-w-lg leading-relaxed">
                 Founded by a student with a dream, Bright Beginnings Books has distributed over{' '}
@@ -127,10 +198,10 @@ export function Hero() {
             <div className="flex flex-col sm:flex-row gap-4 animate-fade-in-up animation-delay-200">
               <button
                 onClick={() => scrollToSection('get-involved')}
-                className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-sunset-orange to-sunset-coral text-white rounded-full font-semibold text-lg shadow-xl shadow-sunset-orange/25 hover:shadow-2xl hover:shadow-sunset-orange/30 transition-all duration-300 hover:scale-[1.02] overflow-hidden"
+                className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-sunset-orange to-sunset-coral text-white rounded-full font-semibold text-lg shadow-xl shadow-sunset-orange/25 hover:shadow-2xl hover:shadow-sunset-orange/30 transition-all duration-300 hover:scale-[1.02] overflow-hidden btn-ripple"
               >
                 <span className="relative z-10 flex items-center gap-2">
-                  <Heart className="w-5 h-5" />
+                  <Heart className="w-5 h-5 group-hover:animate-bounce-gentle" />
                   Make a Donation
                 </span>
                 <div className="absolute inset-0 bg-gradient-to-r from-sunset-coral to-sunset-pink opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -138,9 +209,9 @@ export function Hero() {
 
               <button
                 onClick={() => scrollToSection('about')}
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-warm-gray-800 rounded-full font-semibold text-lg border-2 border-warm-gray-200 hover:border-sunset-orange hover:text-sunset-orange shadow-lg hover:shadow-xl transition-all duration-300"
+                className="group inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-warm-gray-800 rounded-full font-semibold text-lg border-2 border-warm-gray-200 hover:border-sunset-orange hover:text-sunset-orange shadow-lg hover:shadow-xl transition-all duration-300"
               >
-                <BookOpen className="w-5 h-5" />
+                <BookOpen className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
                 Our Story
               </button>
             </div>
@@ -154,9 +225,9 @@ export function Hero() {
                   <div
                     key={index}
                     ref={ref}
-                    className="text-center p-4 bg-white/60 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                    className="group text-center p-4 bg-white/60 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 cursor-pointer"
                   >
-                    <div className={`inline-flex items-center justify-center w-10 h-10 ${stat.color} bg-current/10 rounded-xl mb-2`}>
+                    <div className={`inline-flex items-center justify-center w-10 h-10 ${stat.bgColor} rounded-xl mb-2 group-hover:scale-110 transition-transform duration-300`}>
                       <Icon className={`w-5 h-5 ${stat.color}`} />
                     </div>
                     <div className={`text-2xl sm:text-3xl font-bold ${stat.color} stat-number`}>
@@ -169,22 +240,36 @@ export function Hero() {
             </div>
           </div>
 
-          {/* Image Section */}
+          {/* Image Section with Parallax */}
           <div className="relative animate-fade-in-up animation-delay-400">
             {/* Main Image */}
-            <div className="relative">
+            <div className="relative" style={{ transform: `translateY(${-offset * 0.2}px)` }}>
               <div className="relative rounded-3xl overflow-hidden shadow-2xl shadow-warm-gray-900/20">
                 <ImageWithFallback
-                  src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&ixlib=rb-4.0.3&q=80&w=1080"
-                  alt="Children reading books together"
+                  src="https://images.unsplash.com/photo-1516627145497-ae6968895b74?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&ixlib=rb-4.0.3&q=80&w=1080"
+                  alt="Diverse children reading colorful books together outdoors"
                   className="w-full h-[500px] object-cover"
                 />
                 {/* Image Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-warm-gray-900/40 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-warm-gray-900/50 via-transparent to-transparent" />
+
+                {/* Video Play Button */}
+                <button
+                  onClick={() => setIsVideoPlaying(true)}
+                  className="absolute inset-0 flex items-center justify-center group"
+                  aria-label="Watch our story"
+                >
+                  <div className="w-20 h-20 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform duration-300">
+                    <Play className="w-8 h-8 text-sunset-orange ml-1" fill="currentColor" />
+                  </div>
+                  <span className="absolute bottom-20 text-white font-medium text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    Watch Our Story
+                  </span>
+                </button>
               </div>
 
               {/* Floating Card - Impact */}
-              <div className="absolute -bottom-6 -left-6 bg-white p-5 rounded-2xl shadow-xl animate-float hidden md:block">
+              <div className="absolute -bottom-6 -left-6 bg-white p-5 rounded-2xl shadow-xl animate-float hidden md:block" style={{ transform: `translateY(${offset * 0.3}px)` }}>
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-gradient-to-br from-forest-green to-ocean-teal rounded-xl flex items-center justify-center">
                     <Globe className="w-6 h-6 text-white" />
@@ -197,7 +282,7 @@ export function Hero() {
               </div>
 
               {/* Floating Card - Books */}
-              <div className="absolute -top-4 -right-4 bg-white p-4 rounded-2xl shadow-xl animate-float animation-delay-200 hidden md:block">
+              <div className="absolute -top-4 -right-4 bg-white p-4 rounded-2xl shadow-xl animate-float animation-delay-200 hidden md:block" style={{ transform: `translateY(${-offset * 0.2}px)` }}>
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-gradient-to-br from-sunset-orange to-sunset-coral rounded-xl flex items-center justify-center">
                     <BookOpen className="w-5 h-5 text-white" />
@@ -209,8 +294,16 @@ export function Hero() {
                 </div>
               </div>
 
+              {/* New Floating Card - Growing Daily */}
+              <div className="absolute top-1/2 -right-8 bg-gradient-to-r from-golden-yellow to-warm-amber p-3 rounded-xl shadow-xl animate-bounce-gentle hidden lg:block">
+                <div className="flex items-center gap-2 text-white">
+                  <Sparkles className="w-4 h-4" />
+                  <span className="text-sm font-bold">Growing Daily!</span>
+                </div>
+              </div>
+
               {/* Decorative Ring */}
-              <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] border-2 border-dashed border-sunset-orange/20 rounded-full" />
+              <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] border-2 border-dashed border-sunset-orange/20 rounded-full animate-spin" style={{ animationDuration: '60s' }} />
             </div>
           </div>
         </div>
@@ -219,13 +312,33 @@ export function Hero() {
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
           <button
             onClick={() => scrollToSection('about')}
-            className="flex flex-col items-center gap-2 text-warm-gray-500 hover:text-sunset-orange transition-colors"
+            className="flex flex-col items-center gap-2 text-warm-gray-500 hover:text-sunset-orange transition-colors group"
           >
-            <span className="text-sm font-medium">Discover More</span>
+            <span className="text-sm font-medium group-hover:translate-y-[-2px] transition-transform">Discover More</span>
             <ArrowDown className="w-5 h-5" />
           </button>
         </div>
       </div>
+
+      {/* Video Modal (placeholder - can be expanded) */}
+      {isVideoPlaying && (
+        <div
+          className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4"
+          onClick={() => setIsVideoPlaying(false)}
+        >
+          <div className="bg-white rounded-2xl p-8 max-w-2xl text-center">
+            <Sparkles className="w-16 h-16 text-sunset-orange mx-auto mb-4" />
+            <h3 className="text-2xl font-bold text-warm-gray-900 mb-2">Coming Soon!</h3>
+            <p className="text-warm-gray-600 mb-4">Our story video is in production. Check back soon!</p>
+            <button
+              onClick={() => setIsVideoPlaying(false)}
+              className="px-6 py-2 bg-sunset-orange text-white rounded-full font-semibold hover:bg-sunset-coral transition-colors"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
