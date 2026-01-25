@@ -10,8 +10,12 @@ export function Header() {
   const { t } = useLanguage();
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+    let ticking = false;
+    let lastScrollY = window.scrollY;
+
+    const updateScrollState = () => {
+      const scrollY = lastScrollY;
+      setScrolled(scrollY > 20);
 
       // Update active section based on scroll position
       const sections = ['hero', 'about', 'mission', 'impact', 'programs', 'get-involved', 'contact'];
@@ -25,9 +29,18 @@ export function Header() {
           }
         }
       }
+      ticking = false;
     };
 
-    window.addEventListener('scroll', handleScroll);
+    const handleScroll = () => {
+      lastScrollY = window.scrollY;
+      if (!ticking) {
+        requestAnimationFrame(updateScrollState);
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { Heart, BookOpen, Users, Globe, ArrowDown, Sparkles, Star } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import { useLanguage } from '../i18n';
@@ -32,32 +32,29 @@ function useTypingEffect(text: string, speed: number = 50, startDelay: number = 
   return { displayedText, isComplete };
 }
 
-// Animated counter hook with intersection observer
-function useCountUp(end: number, duration: number = 2000, startOnView: boolean = true) {
+// Optimized animated counter with intersection observer
+function useCountUp(end: number, duration: number = 2000) {
   const [count, setCount] = useState(0);
   const [hasStarted, setHasStarted] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!startOnView) {
-      setHasStarted(true);
-    }
+    const element = ref.current;
+    if (!element) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !hasStarted) {
           setHasStarted(true);
+          observer.disconnect();
         }
       },
       { threshold: 0.5 }
     );
 
-    if (ref.current) {
-      observer.observe(ref.current);
-    }
-
+    observer.observe(element);
     return () => observer.disconnect();
-  }, [hasStarted, startOnView]);
+  }, [hasStarted]);
 
   useEffect(() => {
     if (!hasStarted) return;
@@ -68,8 +65,6 @@ function useCountUp(end: number, duration: number = 2000, startOnView: boolean =
     const animate = (timestamp: number) => {
       if (!startTime) startTime = timestamp;
       const progress = Math.min((timestamp - startTime) / duration, 1);
-
-      // Easing function for smooth animation
       const easeOutQuart = 1 - Math.pow(1 - progress, 4);
       setCount(Math.floor(easeOutQuart * end));
 
@@ -79,32 +74,37 @@ function useCountUp(end: number, duration: number = 2000, startOnView: boolean =
     };
 
     animationFrame = requestAnimationFrame(animate);
-
     return () => cancelAnimationFrame(animationFrame);
   }, [hasStarted, end, duration]);
 
   return { count, ref };
 }
 
-// Parallax scroll hook
-function useParallax(speed: number = 0.5) {
-  const [offset, setOffset] = useState(0);
-  const ref = useRef<HTMLDivElement>(null);
+// Individual stat component to properly use hooks
+function StatCard({ icon: Icon, value, suffix, label, color, bgColor }: {
+  icon: typeof BookOpen;
+  value: number;
+  suffix: string;
+  label: string;
+  color: string;
+  bgColor: string;
+}) {
+  const { count, ref } = useCountUp(value, 2500);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (ref.current) {
-        const rect = ref.current.getBoundingClientRect();
-        const scrollProgress = (window.innerHeight - rect.top) / (window.innerHeight + rect.height);
-        setOffset(scrollProgress * 100 * speed);
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [speed]);
-
-  return { offset, ref };
+  return (
+    <div
+      ref={ref}
+      className="group text-center p-4 bg-white/60 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer"
+    >
+      <div className={`inline-flex items-center justify-center w-10 h-10 ${bgColor} rounded-xl mb-2 transition-transform duration-300 group-hover:scale-110`}>
+        <Icon className={`w-5 h-5 ${color}`} />
+      </div>
+      <div className={`text-2xl sm:text-3xl font-bold ${color} stat-number`}>
+        {count.toLocaleString()}{suffix}
+      </div>
+      <div className="text-xs sm:text-sm text-warm-gray-600 font-medium mt-1">{label}</div>
+    </div>
+  );
 }
 
 export function Hero() {
@@ -114,12 +114,11 @@ export function Hero() {
   const heroText = language === 'es' ? heroTextEs : heroTextEn;
   const magicWord = language === 'es' ? 'Magia' : 'Magic';
   const { displayedText, isComplete } = useTypingEffect(heroText, 40, 800);
-  const { offset, ref: parallaxRef } = useParallax(0.3);
 
-  const scrollToSection = (id: string) => {
+  const scrollToSection = useCallback((id: string) => {
     const element = document.getElementById(id);
     element?.scrollIntoView({ behavior: 'smooth' });
-  };
+  }, []);
 
   const stats = useMemo(() => [
     { icon: BookOpen, value: 55000, suffix: '+', label: t('booksLabel'), color: 'text-sunset-orange', bgColor: 'bg-sunset-orange/10' },
@@ -129,37 +128,28 @@ export function Hero() {
 
   return (
     <section id="hero" className="relative min-h-screen flex items-center overflow-hidden bg-gradient-to-br from-orange-50 via-rose-50 to-purple-50">
-      {/* Animated Background Elements with Parallax */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none" ref={parallaxRef}>
-        {/* Gradient Orbs with parallax */}
-        <div
-          className="blob blob-orange w-[600px] h-[600px] -top-40 -left-40 animate-float-slow"
-          style={{ transform: `translateY(${offset * 0.5}px)` }}
-        />
-        <div
-          className="blob blob-pink w-[500px] h-[500px] top-1/2 -right-40 animate-float-slow animation-delay-200"
-          style={{ transform: `translateY(${offset * 0.3}px)` }}
-        />
-        <div
-          className="blob blob-yellow w-[400px] h-[400px] bottom-0 left-1/3 animate-float-slow animation-delay-400"
-          style={{ transform: `translateY(${-offset * 0.4}px)` }}
-        />
+      {/* Static Background Elements - no scroll-based transforms for better performance */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {/* Gradient Orbs - CSS animations only */}
+        <div className="blob blob-orange w-[600px] h-[600px] -top-40 -left-40 animate-float-slow" />
+        <div className="blob blob-pink w-[500px] h-[500px] top-1/2 -right-40 animate-float-slow animation-delay-200" />
+        <div className="blob blob-yellow w-[400px] h-[400px] bottom-0 left-1/3 animate-float-slow animation-delay-400" />
 
-        {/* Floating Books Decoration */}
-        <div className="absolute top-32 right-[15%] animate-float animation-delay-100" style={{ transform: `translateY(${offset * 0.6}px)` }}>
+        {/* Floating Books - CSS animations only */}
+        <div className="absolute top-32 right-[15%] animate-float animation-delay-100">
           <div className="w-16 h-20 bg-gradient-to-br from-sunset-orange to-sunset-coral rounded-lg shadow-xl rotate-12 opacity-30" />
         </div>
-        <div className="absolute bottom-40 left-[10%] animate-float animation-delay-300" style={{ transform: `translateY(${-offset * 0.5}px)` }}>
+        <div className="absolute bottom-40 left-[10%] animate-float animation-delay-300">
           <div className="w-12 h-16 bg-gradient-to-br from-sky-blue to-ocean-teal rounded-lg shadow-xl -rotate-6 opacity-30" />
         </div>
-        <div className="absolute top-1/2 left-[5%] animate-float animation-delay-500" style={{ transform: `translateY(${offset * 0.4}px)` }}>
+        <div className="absolute top-1/2 left-[5%] animate-float animation-delay-500">
           <div className="w-10 h-14 bg-gradient-to-br from-golden-yellow to-warm-amber rounded-lg shadow-xl rotate-3 opacity-25" />
         </div>
-        <div className="absolute top-[40%] right-[8%] animate-float animation-delay-700" style={{ transform: `translateY(${-offset * 0.3}px)` }}>
+        <div className="absolute top-[40%] right-[8%] animate-float animation-delay-700">
           <div className="w-14 h-18 bg-gradient-to-br from-mountain-purple to-sunset-pink rounded-lg shadow-xl -rotate-12 opacity-20" />
         </div>
 
-        {/* Sparkle Elements */}
+        {/* Sparkle Elements - CSS animations only */}
         <Star className="absolute top-[20%] right-[25%] w-4 h-4 text-golden-yellow animate-sparkle" fill="currentColor" />
         <Star className="absolute top-[60%] right-[10%] w-3 h-3 text-sunset-orange animate-sparkle animation-delay-200" fill="currentColor" />
         <Star className="absolute bottom-[30%] left-[20%] w-5 h-5 text-sunset-pink animate-sparkle animation-delay-400" fill="currentColor" />
@@ -223,34 +213,18 @@ export function Hero() {
               </button>
             </div>
 
-            {/* Stats Row */}
+            {/* Stats Row - using separate components for proper hook usage */}
             <div className="grid grid-cols-3 gap-4 pt-8 animate-fade-in-up animation-delay-300">
-              {stats.map((stat, index) => {
-                const { count, ref } = useCountUp(stat.value, 2500);
-                const Icon = stat.icon;
-                return (
-                  <div
-                    key={index}
-                    ref={ref}
-                    className="group text-center p-4 bg-white/60 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 cursor-pointer"
-                  >
-                    <div className={`inline-flex items-center justify-center w-10 h-10 ${stat.bgColor} rounded-xl mb-2 group-hover:scale-110 transition-transform duration-300`}>
-                      <Icon className={`w-5 h-5 ${stat.color}`} />
-                    </div>
-                    <div className={`text-2xl sm:text-3xl font-bold ${stat.color} stat-number`}>
-                      {count.toLocaleString()}{stat.suffix}
-                    </div>
-                    <div className="text-xs sm:text-sm text-warm-gray-600 font-medium mt-1">{stat.label}</div>
-                  </div>
-                );
-              })}
+              {stats.map((stat, index) => (
+                <StatCard key={index} {...stat} />
+              ))}
             </div>
           </div>
 
-          {/* Image Section with Parallax */}
+          {/* Image Section - no parallax for smoother scrolling */}
           <div className="relative animate-fade-in-up animation-delay-400">
             {/* Main Image */}
-            <div className="relative" style={{ transform: `translateY(${-offset * 0.2}px)` }}>
+            <div className="relative">
               <div className="relative rounded-3xl overflow-hidden shadow-2xl shadow-warm-gray-900/20">
                 <ImageWithFallback
                   src="/images/kids.jpeg"
@@ -262,7 +236,7 @@ export function Hero() {
               </div>
 
               {/* Floating Card - Impact */}
-              <div className="absolute -bottom-6 -left-6 bg-white p-5 rounded-2xl shadow-xl animate-float hidden md:block" style={{ transform: `translateY(${offset * 0.3}px)` }}>
+              <div className="absolute -bottom-6 -left-6 bg-white p-5 rounded-2xl shadow-xl animate-float hidden md:block">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-gradient-to-br from-forest-green to-ocean-teal rounded-xl flex items-center justify-center">
                     <Globe className="w-6 h-6 text-white" />
@@ -275,7 +249,7 @@ export function Hero() {
               </div>
 
               {/* Floating Card - Books */}
-              <div className="absolute -top-4 -right-4 bg-white p-4 rounded-2xl shadow-xl animate-float animation-delay-200 hidden md:block" style={{ transform: `translateY(${-offset * 0.2}px)` }}>
+              <div className="absolute -top-4 -right-4 bg-white p-4 rounded-2xl shadow-xl animate-float animation-delay-200 hidden md:block">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-gradient-to-br from-sunset-orange to-sunset-coral rounded-xl flex items-center justify-center">
                     <BookOpen className="w-5 h-5 text-white" />
@@ -295,8 +269,8 @@ export function Hero() {
                 </div>
               </div>
 
-              {/* Decorative Ring */}
-              <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] border-2 border-dashed border-sunset-orange/20 rounded-full animate-spin" style={{ animationDuration: '60s' }} />
+              {/* Decorative Ring - reduced animation speed for performance */}
+              <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] border-2 border-dashed border-sunset-orange/20 rounded-full" style={{ animation: 'spin 180s linear infinite', willChange: 'transform' }} />
             </div>
           </div>
         </div>
@@ -307,7 +281,7 @@ export function Hero() {
             onClick={() => scrollToSection('about')}
             className="flex flex-col items-center gap-2 text-warm-gray-500 hover:text-sunset-orange transition-colors group"
           >
-            <span className="text-sm font-medium group-hover:translate-y-[-2px] transition-transform">{t('discoverMore')}</span>
+            <span className="text-sm font-medium">{t('discoverMore')}</span>
             <ArrowDown className="w-5 h-5" />
           </button>
         </div>
