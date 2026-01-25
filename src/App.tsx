@@ -5,12 +5,25 @@ import { FounderStory } from './components/FounderStory';
 import { Mission } from './components/Mission';
 import { Impact } from './components/Impact';
 import { Programs } from './components/Programs';
+import { Events } from './components/Events';
 import { BookRequest } from './components/BookRequest';
 import { GetInvolved } from './components/GetInvolved';
 import { Testimonials } from './components/Testimonials';
 import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
 import { ArrowUp, BookOpen } from 'lucide-react';
+
+// Skip to content link for accessibility
+function SkipToContent() {
+  return (
+    <a
+      href="#main-content"
+      className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-6 focus:py-3 focus:bg-sunset-orange focus:text-white focus:rounded-lg focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-sunset-coral focus:ring-offset-2 transition-all"
+    >
+      Skip to main content
+    </a>
+  );
+}
 
 // Scroll progress indicator component
 function ScrollProgress() {
@@ -89,9 +102,70 @@ function FloatingBooks() {
   );
 }
 
+// Mascot component - appears after scrolling
+function Mascot() {
+  const [isVisible, setIsVisible] = useState(false);
+  const [isWaving, setIsWaving] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsVisible(window.scrollY > 800);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Periodic wave animation
+  useEffect(() => {
+    if (isVisible) {
+      const interval = setInterval(() => {
+        setIsWaving(true);
+        setTimeout(() => setIsWaving(false), 1000);
+      }, 8000);
+      return () => clearInterval(interval);
+    }
+  }, [isVisible]);
+
+  return (
+    <div
+      className={`fixed bottom-24 left-6 z-30 transition-all duration-500 hidden lg:block ${
+        isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-20'
+      }`}
+    >
+      <div className="relative group cursor-pointer" onClick={() => setIsWaving(true)}>
+        {/* Speech bubble */}
+        <div className={`absolute -top-16 left-1/2 -translate-x-1/2 bg-white px-4 py-2 rounded-xl shadow-lg whitespace-nowrap transition-all duration-300 ${
+          isWaving ? 'opacity-100 scale-100' : 'opacity-0 scale-90'
+        }`}>
+          <span className="text-sm font-medium text-warm-gray-700">Keep reading! 📚</span>
+          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-3 h-3 bg-white rotate-45" />
+        </div>
+
+        {/* Mascot image */}
+        <div className={`w-20 h-20 rounded-full overflow-hidden shadow-xl border-4 border-white transition-transform duration-300 hover:scale-110 ${
+          isWaving ? 'animate-bounce-gentle' : ''
+        }`}>
+          <img
+            src="/images/mascot.JPG"
+            alt="Bright Beginnings Books Mascot"
+            className="w-full h-full object-cover"
+          />
+        </div>
+
+        {/* Glow effect on hover */}
+        <div className="absolute inset-0 rounded-full bg-sunset-orange/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      </div>
+    </div>
+  );
+}
+
 export default function App() {
   return (
     <div className="min-h-screen bg-cream-white relative">
+      {/* Accessibility: Skip to content link */}
+      <SkipToContent />
+
       {/* Scroll Progress Indicator */}
       <ScrollProgress />
 
@@ -99,12 +173,13 @@ export default function App() {
       <FloatingBooks />
 
       <Header />
-      <main className="relative z-10">
+      <main id="main-content" className="relative z-10" role="main">
         <Hero />
         <FounderStory />
         <Mission />
         <Impact />
         <Programs />
+        <Events />
         <BookRequest />
         <Testimonials />
         <GetInvolved />
@@ -114,6 +189,9 @@ export default function App() {
 
       {/* Back to top button */}
       <BackToTop />
+
+      {/* Mascot - friendly floating character */}
+      <Mascot />
     </div>
   );
 }

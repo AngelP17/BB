@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
-import { Heart, BookOpen, Users, Globe, ArrowDown, Sparkles, Star, Play } from 'lucide-react';
+import { Heart, BookOpen, Users, Globe, ArrowDown, Sparkles, Star } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 
 // Typing effect hook
@@ -107,7 +107,6 @@ export function Hero() {
   const heroText = "Every Child Deserves the Magic of Reading";
   const { displayedText, isComplete } = useTypingEffect(heroText, 40, 800);
   const { offset, ref: parallaxRef } = useParallax(0.3);
-  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
@@ -246,26 +245,12 @@ export function Hero() {
             <div className="relative" style={{ transform: `translateY(${-offset * 0.2}px)` }}>
               <div className="relative rounded-3xl overflow-hidden shadow-2xl shadow-warm-gray-900/20">
                 <ImageWithFallback
-                  src="https://images.unsplash.com/photo-1516627145497-ae6968895b74?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&ixlib=rb-4.0.3&q=80&w=1080"
-                  alt="Diverse children reading colorful books together outdoors"
-                  className="w-full h-[500px] object-cover"
+                  src="/images/kids.jpeg"
+                  alt="Children enjoying books from Bright Beginnings Books"
+                  className="w-full h-[500px] object-cover object-top"
                 />
                 {/* Image Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-warm-gray-900/50 via-transparent to-transparent" />
-
-                {/* Video Play Button */}
-                <button
-                  onClick={() => setIsVideoPlaying(true)}
-                  className="absolute inset-0 flex items-center justify-center group"
-                  aria-label="Watch our story"
-                >
-                  <div className="w-20 h-20 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform duration-300">
-                    <Play className="w-8 h-8 text-sunset-orange ml-1" fill="currentColor" />
-                  </div>
-                  <span className="absolute bottom-20 text-white font-medium text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    Watch Our Story
-                  </span>
-                </button>
               </div>
 
               {/* Floating Card - Impact */}
@@ -319,26 +304,6 @@ export function Hero() {
           </button>
         </div>
       </div>
-
-      {/* Video Modal (placeholder - can be expanded) */}
-      {isVideoPlaying && (
-        <div
-          className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4"
-          onClick={() => setIsVideoPlaying(false)}
-        >
-          <div className="bg-white rounded-2xl p-8 max-w-2xl text-center">
-            <Sparkles className="w-16 h-16 text-sunset-orange mx-auto mb-4" />
-            <h3 className="text-2xl font-bold text-warm-gray-900 mb-2">Coming Soon!</h3>
-            <p className="text-warm-gray-600 mb-4">Our story video is in production. Check back soon!</p>
-            <button
-              onClick={() => setIsVideoPlaying(false)}
-              className="px-6 py-2 bg-sunset-orange text-white rounded-full font-semibold hover:bg-sunset-coral transition-colors"
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )}
     </section>
   );
 }

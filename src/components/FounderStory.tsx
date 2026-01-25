@@ -75,7 +75,7 @@ export function FounderStory() {
       title: 'A Dream Begins',
       description: 'Addie Elizabeth Jones, an avid reader since childhood, starts Bright Beginnings Books with a simple mission: share her love of reading with every child who needs it.',
       icon: BookOpen,
-      image: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=400',
+      image: '/images/addie&books.jpeg',
       stats: { books: '500+', reach: 'Local' },
     },
     {
@@ -84,7 +84,7 @@ export function FounderStory() {
       title: 'Growing Impact',
       description: 'The organization expands from local school visits to reaching children across Arkansas and beyond. Partnerships with schools and community centers flourish.',
       icon: Heart,
-      image: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=400',
+      image: '/images/addie&kid.jpeg',
       stats: { books: '10,000+', reach: 'Statewide' },
     },
     {
@@ -93,7 +93,7 @@ export function FounderStory() {
       title: '55,000+ Books',
       description: 'Now reaching all 50 states and multiple countries, Bright Beginnings Books continues to grow every day, touching the lives of thousands of children.',
       icon: Award,
-      image: 'https://images.unsplash.com/photo-1529390079861-591f6a5c2dc1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=400',
+      image: '/images/addie&baby.jpeg',
       stats: { books: '55,000+', reach: 'Nationwide' },
     },
   ];
@@ -132,8 +132,8 @@ export function FounderStory() {
               {/* Main Image with parallax effect */}
               <div className="relative rounded-3xl overflow-hidden shadow-2xl">
                 <ImageWithFallback
-                  src="https://images.unsplash.com/photo-1544717305-2782549b5136?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&ixlib=rb-4.0.3&q=80&w=1080"
-                  alt="Young woman organizing and distributing books to children"
+                  src="/images/addie&books.jpeg"
+                  alt="Addie Elizabeth Jones, founder of Bright Beginnings Books, with books"
                   className="w-full h-[450px] object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-warm-gray-900/70 via-warm-gray-900/30 to-transparent" />

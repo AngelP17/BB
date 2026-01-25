@@ -140,7 +140,7 @@ function AnimatedRing({
   );
 }
 
-// Simple US Map visualization
+// US Map SVG visualization with proper state shapes
 function USMapVisualization() {
   const [isVisible, setIsVisible] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -162,95 +162,135 @@ function USMapVisualization() {
     return () => observer.disconnect();
   }, []);
 
-  // Major US cities/regions with approximate positions
-  const states = [
-    { name: 'WA', x: 12, y: 8, delay: 100 },
-    { name: 'OR', x: 10, y: 18, delay: 150 },
-    { name: 'CA', x: 8, y: 35, delay: 200 },
-    { name: 'NV', x: 15, y: 30, delay: 250 },
-    { name: 'ID', x: 18, y: 15, delay: 300 },
-    { name: 'MT', x: 25, y: 10, delay: 350 },
-    { name: 'WY', x: 28, y: 22, delay: 400 },
-    { name: 'UT', x: 20, y: 30, delay: 450 },
-    { name: 'AZ', x: 18, y: 45, delay: 500 },
-    { name: 'CO', x: 30, y: 35, delay: 550 },
-    { name: 'NM', x: 28, y: 48, delay: 600 },
-    { name: 'TX', x: 38, y: 55, delay: 650 },
-    { name: 'OK', x: 42, y: 45, delay: 700 },
-    { name: 'KS', x: 42, y: 35, delay: 750 },
-    { name: 'NE', x: 40, y: 28, delay: 800 },
-    { name: 'SD', x: 38, y: 18, delay: 850 },
-    { name: 'ND', x: 38, y: 10, delay: 900 },
-    { name: 'MN', x: 50, y: 15, delay: 950 },
-    { name: 'IA', x: 52, y: 28, delay: 1000 },
-    { name: 'MO', x: 52, y: 38, delay: 1050 },
-    { name: 'AR', x: 52, y: 48, delay: 1100, highlight: true }, // Arkansas highlighted
-    { name: 'LA', x: 52, y: 58, delay: 1150 },
-    { name: 'WI', x: 58, y: 18, delay: 1200 },
-    { name: 'IL', x: 58, y: 32, delay: 1250 },
-    { name: 'MS', x: 58, y: 52, delay: 1300 },
-    { name: 'MI', x: 65, y: 20, delay: 1350 },
-    { name: 'IN', x: 65, y: 32, delay: 1400 },
-    { name: 'KY', x: 68, y: 40, delay: 1450 },
-    { name: 'TN', x: 68, y: 45, delay: 1500 },
-    { name: 'AL', x: 65, y: 52, delay: 1550 },
-    { name: 'OH', x: 72, y: 32, delay: 1600 },
-    { name: 'WV', x: 75, y: 38, delay: 1650 },
-    { name: 'VA', x: 80, y: 40, delay: 1700 },
-    { name: 'NC', x: 82, y: 45, delay: 1750 },
-    { name: 'SC', x: 78, y: 50, delay: 1800 },
-    { name: 'GA', x: 75, y: 55, delay: 1850 },
-    { name: 'FL', x: 80, y: 65, delay: 1900 },
-    { name: 'PA', x: 82, y: 30, delay: 1950 },
-    { name: 'NY', x: 85, y: 22, delay: 2000 },
-    { name: 'VT', x: 88, y: 14, delay: 2050 },
-    { name: 'NH', x: 90, y: 16, delay: 2100 },
-    { name: 'MA', x: 92, y: 22, delay: 2150 },
-    { name: 'CT', x: 90, y: 26, delay: 2200 },
-    { name: 'NJ', x: 88, y: 32, delay: 2250 },
-    { name: 'MD', x: 85, y: 36, delay: 2300 },
-  ];
-
   return (
-    <div ref={ref} className="relative w-full h-48 bg-white/5 rounded-2xl overflow-hidden">
-      {/* Map dots */}
-      {states.map((state, index) => (
-        <div
-          key={state.name}
-          className={`absolute w-3 h-3 rounded-full transition-all duration-500 ${state.highlight
-            ? 'bg-golden-yellow w-4 h-4 animate-pulse-glow'
-            : 'bg-white/80'
-            }`}
-          style={{
-            left: `${state.x}%`,
-            top: `${state.y}%`,
-            opacity: isVisible ? 1 : 0,
-            transform: isVisible ? 'scale(1)' : 'scale(0)',
-            transitionDelay: `${state.delay}ms`,
-          }}
-        >
-          {state.highlight && (
-            <span className="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-bold text-golden-yellow whitespace-nowrap">
-              Harrison, AR
-            </span>
-          )}
-        </div>
-      ))}
+    <div ref={ref} className="relative w-full bg-white/5 rounded-2xl overflow-hidden p-4">
+      {/* US Map SVG */}
+      <svg
+        viewBox="0 0 960 600"
+        className={`w-full h-auto transition-opacity duration-1000 ${isVisible ? 'opacity-100' : 'opacity-0'}`}
+        style={{ maxHeight: '280px' }}
+      >
+        {/* Simplified US outline path */}
+        <path
+          d="M158.1,489.9l-1.1-1.5l-4.5-0.3l-3.8-3.7l-2.5,0.5l-0.4,3.3l1.1,4.4l-1.7,5.3l-4.6,5.2l-2.8,4.7l-1.5,5.9l2.9,6.1l1.1,6.9l-0.5,5l-2.5,4.6l-2.9-2.7l-4.2-0.8l-4.5,5l-4.9-1.7l-3.3,0.5l-3.2,4.9l-7.6-2.9l-3.9-4.4l0.2-4.5l-2.7-4.7l-5.4-0.5l-4.2-5.6l-3.9-1.3l-2.5,3.9l-6.7-2.7l-9.2-6.9l-9.1-3.9l-1.5-2.1l-0.8-6.7l-4.7-0.5l-5.1,1l-4.9-4.8l-8.9-3.5l-7.5-4.9l-5.9-1.7l-5.9,1.1l-3.7-2.3l-3.3-4.7l-3.9-0.5l-5.7,3.5l-5.3-1.1l-1.3-3.1l3.7-4.1l-2.5-4.5l-5.1-3.5l-4.1,0.5l-5.7-4.3l-4.1-1.1l-6.3,2.7l-5.9-5.1l-5.7,1.5l-3.3,5.3l-6.5-1.1l-4.5-4.5l-3.9-0.5l-4.9,5.3l-8.9-5.5l-6.3,0.5l-2.9,4.1l-8.3-3.7l-10.1-1.3l-3.7,1.7l-2.5,4.9l-5.9,0.3l-2.7-3.9l-6.5-0.5l-4.1,3.5l-6.7-4.9l-7.1,1.1l-2.9-3.3l-5.7,0.1l-3.9-3.9l-8.9,2.3l-1.7-3.1l-7.1-0.5l-2.5,2.3l0.1,35.1l32.1-0.3l32.1-0.5l32.1-0.7l32.1-0.9l32.1-1.1l32.1-1.3l20.5-1.3"
+          fill="none"
+          stroke="rgba(255,255,255,0.3)"
+          strokeWidth="2"
+          className={`transition-all duration-1000 delay-500 ${isVisible ? 'opacity-100' : 'opacity-0'}`}
+        />
 
-      {/* Connection lines (simplified) */}
-      <svg className="absolute inset-0 w-full h-full" style={{ opacity: isVisible ? 0.3 : 0, transition: 'opacity 2s ease-out 2.5s' }}>
-        <line x1="52%" y1="48%" x2="30%" y2="35%" stroke="white" strokeWidth="1" strokeDasharray="4" />
-        <line x1="52%" y1="48%" x2="75%" y2="55%" stroke="white" strokeWidth="1" strokeDasharray="4" />
-        <line x1="52%" y1="48%" x2="85%" y2="22%" stroke="white" strokeWidth="1" strokeDasharray="4" />
-        <line x1="52%" y1="48%" x2="8%" y2="35%" stroke="white" strokeWidth="1" strokeDasharray="4" />
+        {/* State dots representing coverage */}
+        {[
+          // West Coast
+          { cx: 100, cy: 120, name: 'WA' },
+          { cx: 95, cy: 180, name: 'OR' },
+          { cx: 85, cy: 280, name: 'CA' },
+          // Mountain
+          { cx: 150, cy: 150, name: 'ID' },
+          { cx: 130, cy: 230, name: 'NV' },
+          { cx: 200, cy: 100, name: 'MT' },
+          { cx: 210, cy: 180, name: 'WY' },
+          { cx: 160, cy: 280, name: 'UT' },
+          { cx: 240, cy: 260, name: 'CO' },
+          { cx: 160, cy: 360, name: 'AZ' },
+          { cx: 230, cy: 360, name: 'NM' },
+          // Central
+          { cx: 290, cy: 100, name: 'ND' },
+          { cx: 290, cy: 160, name: 'SD' },
+          { cx: 290, cy: 220, name: 'NE' },
+          { cx: 300, cy: 280, name: 'KS' },
+          { cx: 300, cy: 340, name: 'OK' },
+          { cx: 330, cy: 420, name: 'TX' },
+          // Midwest
+          { cx: 380, cy: 120, name: 'MN' },
+          { cx: 380, cy: 180, name: 'IA' },
+          { cx: 380, cy: 250, name: 'MO' },
+          { cx: 380, cy: 320, name: 'AR', highlight: true }, // Arkansas - HOME
+          { cx: 380, cy: 400, name: 'LA' },
+          { cx: 430, cy: 130, name: 'WI' },
+          { cx: 440, cy: 200, name: 'IL' },
+          { cx: 430, cy: 350, name: 'MS' },
+          // Great Lakes
+          { cx: 490, cy: 130, name: 'MI' },
+          { cx: 480, cy: 210, name: 'IN' },
+          { cx: 520, cy: 250, name: 'OH' },
+          { cx: 500, cy: 280, name: 'KY' },
+          { cx: 520, cy: 310, name: 'TN' },
+          { cx: 480, cy: 360, name: 'AL' },
+          // Southeast
+          { cx: 540, cy: 360, name: 'GA' },
+          { cx: 560, cy: 450, name: 'FL' },
+          { cx: 570, cy: 320, name: 'SC' },
+          { cx: 590, cy: 290, name: 'NC' },
+          { cx: 590, cy: 250, name: 'VA' },
+          { cx: 560, cy: 240, name: 'WV' },
+          // Northeast
+          { cx: 570, cy: 200, name: 'PA' },
+          { cx: 600, cy: 160, name: 'NY' },
+          { cx: 630, cy: 130, name: 'VT' },
+          { cx: 650, cy: 130, name: 'NH' },
+          { cx: 660, cy: 155, name: 'MA' },
+          { cx: 645, cy: 175, name: 'CT' },
+          { cx: 620, cy: 195, name: 'NJ' },
+          { cx: 600, cy: 220, name: 'MD' },
+        ].map((state, index) => (
+          <g key={state.name}>
+            <circle
+              cx={state.cx}
+              cy={state.cy}
+              r={state.highlight ? 12 : 8}
+              fill={state.highlight ? '#FBBF24' : 'rgba(255,255,255,0.8)'}
+              className={`transition-all duration-500 ${isVisible ? 'opacity-100' : 'opacity-0'}`}
+              style={{ transitionDelay: `${index * 40}ms` }}
+            />
+            {state.highlight && (
+              <>
+                <circle
+                  cx={state.cx}
+                  cy={state.cy}
+                  r={20}
+                  fill="none"
+                  stroke="#FBBF24"
+                  strokeWidth="2"
+                  className={`transition-all duration-500 ${isVisible ? 'opacity-60' : 'opacity-0'}`}
+                  style={{ transitionDelay: '1500ms' }}
+                />
+                <text
+                  x={state.cx}
+                  y={state.cy - 30}
+                  textAnchor="middle"
+                  fill="#FBBF24"
+                  fontSize="14"
+                  fontWeight="bold"
+                  className={`transition-all duration-500 ${isVisible ? 'opacity-100' : 'opacity-0'}`}
+                  style={{ transitionDelay: '1500ms' }}
+                >
+                  Harrison, AR
+                </text>
+              </>
+            )}
+          </g>
+        ))}
+
+        {/* Connection lines from Arkansas */}
+        <g className={`transition-opacity duration-1000 ${isVisible ? 'opacity-30' : 'opacity-0'}`} style={{ transitionDelay: '2000ms' }}>
+          <line x1="380" y1="320" x2="85" y2="280" stroke="white" strokeWidth="1" strokeDasharray="8,4" />
+          <line x1="380" y1="320" x2="560" y2="450" stroke="white" strokeWidth="1" strokeDasharray="8,4" />
+          <line x1="380" y1="320" x2="600" y2="160" stroke="white" strokeWidth="1" strokeDasharray="8,4" />
+          <line x1="380" y1="320" x2="100" y2="120" stroke="white" strokeWidth="1" strokeDasharray="8,4" />
+        </g>
       </svg>
 
       {/* Legend */}
-      <div className="absolute bottom-3 right-3 flex items-center gap-2 text-xs text-white/70">
-        <div className="w-2 h-2 bg-golden-yellow rounded-full" />
-        <span>Origin</span>
-        <div className="w-2 h-2 bg-white/80 rounded-full ml-2" />
-        <span>Reached</span>
+      <div className="flex items-center justify-center gap-6 mt-4 text-sm text-white/80">
+        <div className="flex items-center gap-2">
+          <div className="w-3 h-3 bg-golden-yellow rounded-full shadow-lg" />
+          <span>Our Home Base</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-3 h-3 bg-white/80 rounded-full" />
+          <span>States Reached</span>
+        </div>
       </div>
     </div>
   );
@@ -380,15 +420,15 @@ export function Impact() {
             <div className="grid grid-cols-2 gap-4">
               <div className="rounded-xl overflow-hidden shadow-2xl image-shine aspect-square">
                 <ImageWithFallback
-                  src="/images/children_learning_books.png"
-                  alt="Children reading with joy at community event"
+                  src="/images/addie&baby.jpeg"
+                  alt="Addie sharing books with a young child"
                   className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
                 />
               </div>
               <div className="rounded-xl overflow-hidden shadow-2xl image-shine aspect-square">
                 <ImageWithFallback
-                  src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=400"
-                  alt="Colorful children's books on shelves"
+                  src="/images/addie&kid.jpeg"
+                  alt="Addie helping a child select books"
                   className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
                 />
               </div>

@@ -58,8 +58,12 @@ export function Header() {
             className="flex items-center gap-3 group"
           >
             <div className="relative">
-              <div className="w-12 h-12 bg-gradient-to-br from-sunset-orange to-sunset-coral rounded-2xl flex items-center justify-center shadow-lg shadow-sunset-orange/20 group-hover:shadow-xl group-hover:shadow-sunset-orange/30 transition-all duration-300 group-hover:scale-105">
-                <BookOpen className="w-6 h-6 text-white" />
+              <div className="w-12 h-12 rounded-2xl overflow-hidden shadow-lg shadow-sunset-orange/20 group-hover:shadow-xl group-hover:shadow-sunset-orange/30 transition-all duration-300 group-hover:scale-105">
+                <img
+                  src="/images/BrightBeginningsLogo.jpeg"
+                  alt="Bright Beginnings Books Logo"
+                  className="w-full h-full object-cover"
+                />
               </div>
               <div className="absolute -top-1 -right-1 w-4 h-4 bg-golden-yellow rounded-full flex items-center justify-center animate-bounce-gentle">
                 <Heart className="w-2.5 h-2.5 text-warm-gray-800" fill="currentColor" />
@@ -81,16 +85,21 @@ export function Header() {
               <button
                 key={item.id}
                 onClick={() => scrollToSection(item.id)}
-                className={`relative px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                className={`group relative px-4 py-2 text-sm font-medium transition-all duration-300 hover:scale-105 ${
                   activeSection === item.id
                     ? 'text-sunset-orange'
-                    : 'text-warm-gray-600 hover:text-warm-gray-900'
+                    : 'text-warm-gray-600 hover:text-sunset-orange'
                 }`}
               >
                 {item.label}
-                {activeSection === item.id && (
-                  <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 bg-sunset-orange rounded-full" />
-                )}
+                {/* Sliding underline indicator */}
+                <span
+                  className={`absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-sunset-orange to-sunset-coral rounded-full transition-all duration-300 ease-out ${
+                    activeSection === item.id
+                      ? 'w-full opacity-100'
+                      : 'w-0 opacity-0 group-hover:w-full group-hover:opacity-50'
+                  }`}
+                />
               </button>
             ))}
 
