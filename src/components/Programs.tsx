@@ -149,7 +149,7 @@ export function Programs() {
                   <ImageWithFallback
                     src={program.image}
                     alt={program.title}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain bg-warm-gray-50/50"
                   />
                 </div>
 
@@ -210,7 +210,7 @@ export function Programs() {
                   <ImageWithFallback
                     src={program.image}
                     alt={program.title}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain bg-warm-gray-50/50"
                   />
                   <div className="absolute inset-0 bg-gradient-to-r from-warm-gray-900/60 to-transparent lg:bg-gradient-to-t" />
                 </div>
@@ -239,8 +239,8 @@ export function Programs() {
                       key={index}
                       onClick={() => setActiveSpecial(index)}
                       className={`w-full text-left p-4 rounded-2xl transition-all duration-300 ${isActive
-                          ? 'bg-sunset-orange/10 border-2 border-sunset-orange'
-                          : 'bg-warm-gray-50 border-2 border-transparent hover:bg-warm-gray-100'
+                        ? 'bg-sunset-orange/10 border-2 border-sunset-orange'
+                        : 'bg-warm-gray-50 border-2 border-transparent hover:bg-warm-gray-100'
                         }`}
                     >
                       <div className="flex items-start gap-4">

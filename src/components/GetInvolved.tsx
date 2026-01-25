@@ -1,4 +1,4 @@
-import { Heart, Package, Clock, Share2, CreditCard, Mail, ArrowRight, CheckCircle } from 'lucide-react';
+import { Heart, Package, Clock, Share2, CreditCard, Mail, ArrowRight, CheckCircle, Facebook, Twitter, Linkedin } from 'lucide-react';
 
 export function GetInvolved() {
   const ways = [
@@ -192,14 +192,24 @@ export function GetInvolved() {
             <Share2 className="w-5 h-5 text-warm-gray-400" />
             <span className="text-warm-gray-600">Share our mission with your friends and family</span>
             <div className="flex gap-2">
-              {['facebook', 'twitter', 'linkedin'].map((social) => (
-                <button
-                  key={social}
-                  className="w-10 h-10 bg-warm-gray-100 rounded-full flex items-center justify-center hover:bg-sunset-orange hover:text-white transition-all duration-300 text-warm-gray-600"
-                >
-                  <Share2 className="w-4 h-4" />
-                </button>
-              ))}
+              <button
+                className="w-10 h-10 bg-warm-gray-100 rounded-full flex items-center justify-center hover:bg-sunset-orange hover:text-white transition-all duration-300 text-warm-gray-600"
+                aria-label="Share on Facebook"
+              >
+                <Facebook className="w-4 h-4" />
+              </button>
+              <button
+                className="w-10 h-10 bg-warm-gray-100 rounded-full flex items-center justify-center hover:bg-sunset-orange hover:text-white transition-all duration-300 text-warm-gray-600"
+                aria-label="Share on Twitter"
+              >
+                <Twitter className="w-4 h-4" />
+              </button>
+              <button
+                className="w-10 h-10 bg-warm-gray-100 rounded-full flex items-center justify-center hover:bg-sunset-orange hover:text-white transition-all duration-300 text-warm-gray-600"
+                aria-label="Share on LinkedIn"
+              >
+                <Linkedin className="w-4 h-4" />
+              </button>
             </div>
           </div>
         </div>

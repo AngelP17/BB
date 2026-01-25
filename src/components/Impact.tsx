@@ -422,14 +422,14 @@ export function Impact() {
                 <ImageWithFallback
                   src="/images/addie&baby.jpeg"
                   alt="Addie sharing books with a young child"
-                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                  className="w-full h-full object-contain bg-white/5 hover:scale-105 transition-transform duration-500"
                 />
               </div>
               <div className="rounded-xl overflow-hidden shadow-2xl image-shine aspect-square">
                 <ImageWithFallback
                   src="/images/addie&kid.jpeg"
                   alt="Addie helping a child select books"
-                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                  className="w-full h-full object-contain bg-white/5 hover:scale-105 transition-transform duration-500"
                 />
               </div>
             </div>

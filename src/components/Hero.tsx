@@ -247,7 +247,7 @@ export function Hero() {
                 <ImageWithFallback
                   src="/images/kids.jpeg"
                   alt="Children enjoying books from Bright Beginnings Books"
-                  className="w-full h-[500px] object-cover object-top"
+                  className="w-full h-[500px] object-contain bg-warm-gray-50/50"
                 />
                 {/* Image Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-warm-gray-900/50 via-transparent to-transparent" />

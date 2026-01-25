@@ -213,12 +213,6 @@ export function Footer() {
               <span className="text-sunset-orange/50">|</span>
               <span>EIN: 86-2430919</span>
             </div>
-
-            <div className="flex items-center gap-2 text-warm-gray-400 text-sm">
-              <span>Made with</span>
-              <Heart className="w-4 h-4 text-sunset-coral animate-pulse" fill="currentColor" />
-              <span>in Harrison, AR</span>
-            </div>
           </div>
         </div>
       </div>

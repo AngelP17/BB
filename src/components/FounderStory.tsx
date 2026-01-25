@@ -134,7 +134,7 @@ export function FounderStory() {
                 <ImageWithFallback
                   src="/images/addie&books.jpeg"
                   alt="Addie Elizabeth Jones, founder of Bright Beginnings Books, with books"
-                  className="w-full h-[450px] object-cover"
+                  className="w-full h-[450px] object-contain bg-warm-gray-50/50"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-warm-gray-900/70 via-warm-gray-900/30 to-transparent" />
 
@@ -210,8 +210,8 @@ export function FounderStory() {
                   >
                     {/* Icon */}
                     <div className={`relative z-10 w-12 h-12 rounded-xl shadow-lg flex items-center justify-center border-2 transition-all duration-500 ${isActive
-                        ? 'bg-gradient-to-br from-sunset-orange to-sunset-coral border-sunset-orange scale-110'
-                        : 'bg-white border-warm-gray-200'
+                      ? 'bg-gradient-to-br from-sunset-orange to-sunset-coral border-sunset-orange scale-110'
+                      : 'bg-white border-warm-gray-200'
                       }`}>
                       <Icon className={`w-5 h-5 transition-colors duration-300 ${isActive ? 'text-white' : 'text-warm-gray-400'}`} />
                     </div>
@@ -249,7 +249,7 @@ export function FounderStory() {
                       <ImageWithFallback
                         src={milestone.image}
                         alt={milestone.title}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-contain bg-warm-gray-50/50"
                       />
                     </div>
                   </div>

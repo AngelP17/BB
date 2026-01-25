@@ -8,7 +8,6 @@ import { Programs } from './components/Programs';
 import { Events } from './components/Events';
 import { BookRequest } from './components/BookRequest';
 import { GetInvolved } from './components/GetInvolved';
-import { Testimonials } from './components/Testimonials';
 import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
 import { ArrowUp, BookOpen } from 'lucide-react';
@@ -129,23 +128,20 @@ function Mascot() {
 
   return (
     <div
-      className={`fixed bottom-24 left-6 z-30 transition-all duration-500 hidden lg:block ${
-        isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-20'
-      }`}
+      className={`fixed bottom-24 left-6 z-30 transition-all duration-500 hidden lg:block ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-20'
+        }`}
     >
       <div className="relative group cursor-pointer" onClick={() => setIsWaving(true)}>
         {/* Speech bubble */}
-        <div className={`absolute -top-16 left-1/2 -translate-x-1/2 bg-white px-4 py-2 rounded-xl shadow-lg whitespace-nowrap transition-all duration-300 ${
-          isWaving ? 'opacity-100 scale-100' : 'opacity-0 scale-90'
-        }`}>
+        <div className={`absolute -top-16 left-1/2 -translate-x-1/2 bg-white px-4 py-2 rounded-xl shadow-lg whitespace-nowrap transition-all duration-300 ${isWaving ? 'opacity-100 scale-100' : 'opacity-0 scale-90'
+          }`}>
           <span className="text-sm font-medium text-warm-gray-700">Keep reading! 📚</span>
           <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-3 h-3 bg-white rotate-45" />
         </div>
 
         {/* Mascot image */}
-        <div className={`w-20 h-20 rounded-full overflow-hidden shadow-xl border-4 border-white transition-transform duration-300 hover:scale-110 ${
-          isWaving ? 'animate-bounce-gentle' : ''
-        }`}>
+        <div className={`w-20 h-20 rounded-full overflow-hidden shadow-xl border-4 border-white transition-transform duration-300 hover:scale-110 ${isWaving ? 'animate-bounce-gentle' : ''
+          }`}>
           <img
             src="/images/mascot.JPG"
             alt="Bright Beginnings Books Mascot"
@@ -181,7 +177,6 @@ export default function App() {
         <Programs />
         <Events />
         <BookRequest />
-        <Testimonials />
         <GetInvolved />
         <Contact />
       </main>
