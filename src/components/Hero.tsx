@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { Heart, BookOpen, Users, Globe, ArrowDown, Sparkles, Star } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
+import { useLanguage } from '../i18n';
 
 // Typing effect hook
 function useTypingEffect(text: string, speed: number = 50, startDelay: number = 500) {
@@ -10,6 +11,9 @@ function useTypingEffect(text: string, speed: number = 50, startDelay: number = 
   useEffect(() => {
     let timeout: NodeJS.Timeout;
     let charIndex = 0;
+
+    setDisplayedText('');
+    setIsComplete(false);
 
     const startTyping = () => {
       if (charIndex < text.length) {
@@ -104,7 +108,11 @@ function useParallax(speed: number = 0.5) {
 }
 
 export function Hero() {
-  const heroText = "Every Child Deserves the Magic of Reading";
+  const { t, language } = useLanguage();
+  const heroTextEn = "Every Child Deserves the Magic of Reading";
+  const heroTextEs = "Cada Niño Merece la Magia de la Lectura";
+  const heroText = language === 'es' ? heroTextEs : heroTextEn;
+  const magicWord = language === 'es' ? 'Magia' : 'Magic';
   const { displayedText, isComplete } = useTypingEffect(heroText, 40, 800);
   const { offset, ref: parallaxRef } = useParallax(0.3);
 
@@ -114,10 +122,10 @@ export function Hero() {
   };
 
   const stats = useMemo(() => [
-    { icon: BookOpen, value: 55000, suffix: '+', label: 'Books Distributed', color: 'text-sunset-orange', bgColor: 'bg-sunset-orange/10' },
-    { icon: Globe, value: 50, suffix: '+', label: 'States Reached', color: 'text-sky-blue', bgColor: 'bg-sky-blue/10' },
-    { icon: Users, value: 13000, suffix: '+', label: 'Children Helped', color: 'text-forest-green', bgColor: 'bg-forest-green/10' },
-  ], []);
+    { icon: BookOpen, value: 55000, suffix: '+', label: t('booksLabel'), color: 'text-sunset-orange', bgColor: 'bg-sunset-orange/10' },
+    { icon: Globe, value: 50, suffix: '+', label: t('statesReached'), color: 'text-sky-blue', bgColor: 'bg-sky-blue/10' },
+    { icon: Users, value: 13000, suffix: '+', label: t('childrenHelped'), color: 'text-forest-green', bgColor: 'bg-forest-green/10' },
+  ], [t]);
 
   return (
     <section id="hero" className="relative min-h-screen flex items-center overflow-hidden bg-gradient-to-br from-orange-50 via-rose-50 to-purple-50">
@@ -168,17 +176,17 @@ export function Hero() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-forest-green opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-forest-green"></span>
               </span>
-              <span className="text-sm font-medium text-warm-gray-700">501(c)(3) Nonprofit Organization</span>
+              <span className="text-sm font-medium text-warm-gray-700">{t('nonprofitOrganization')}</span>
             </div>
 
             {/* Main Headline with Typing Effect */}
             <div className="space-y-4 animate-fade-in-up animation-delay-100">
               <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-warm-gray-900 leading-[1.1] min-h-[1.2em]">
-                {displayedText.split('Magic').map((part, index) => (
+                {displayedText.split(magicWord).map((part, index) => (
                   <span key={index}>
                     {index > 0 && (
                       <span className="relative inline-block">
-                        <span className="text-gradient">Magic</span>
+                        <span className="text-gradient">{magicWord}</span>
                         <Sparkles className={`absolute -top-2 -right-6 w-6 h-6 text-golden-yellow transition-opacity duration-500 ${isComplete ? 'opacity-100 animate-sparkle' : 'opacity-0'}`} />
                       </span>
                     )}
@@ -188,8 +196,8 @@ export function Hero() {
                 {!isComplete && <span className="animate-pulse">|</span>}
               </h1>
               <p className="text-lg sm:text-xl text-warm-gray-600 max-w-lg leading-relaxed">
-                Founded by a student with a dream, Bright Beginnings Books has distributed over{' '}
-                <span className="font-semibold text-sunset-orange">55,000 books</span> to children across all 50 states and beyond.
+                {t('heroSubtitle')}{' '}
+                <span className="font-semibold text-sunset-orange">{t('heroBooks')}</span> {t('heroSubtitleEnd')}
               </p>
             </div>
 
@@ -201,7 +209,7 @@ export function Hero() {
               >
                 <span className="relative z-10 flex items-center gap-2">
                   <Heart className="w-5 h-5 group-hover:animate-bounce-gentle" />
-                  Make a Donation
+                  {t('makeADonation')}
                 </span>
                 <div className="absolute inset-0 bg-gradient-to-r from-sunset-coral to-sunset-pink opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </button>
@@ -211,7 +219,7 @@ export function Hero() {
                 className="group inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-warm-gray-800 rounded-full font-semibold text-lg border-2 border-warm-gray-200 hover:border-sunset-orange hover:text-sunset-orange shadow-lg hover:shadow-xl transition-all duration-300"
               >
                 <BookOpen className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
-                Our Story
+                {t('ourStory')}
               </button>
             </div>
 
@@ -261,7 +269,7 @@ export function Hero() {
                   </div>
                   <div>
                     <div className="text-2xl font-bold text-warm-gray-900">50+</div>
-                    <div className="text-sm text-warm-gray-500">States Reached</div>
+                    <div className="text-sm text-warm-gray-500">{t('statesReachedCard')}</div>
                   </div>
                 </div>
               </div>
@@ -274,7 +282,7 @@ export function Hero() {
                   </div>
                   <div>
                     <div className="text-xl font-bold text-warm-gray-900">55K+</div>
-                    <div className="text-xs text-warm-gray-500">Books Given</div>
+                    <div className="text-xs text-warm-gray-500">{t('booksGiven')}</div>
                   </div>
                 </div>
               </div>
@@ -283,7 +291,7 @@ export function Hero() {
               <div className="absolute top-1/2 -right-8 bg-gradient-to-r from-golden-yellow to-warm-amber p-3 rounded-xl shadow-xl animate-bounce-gentle hidden lg:block">
                 <div className="flex items-center gap-2 text-white">
                   <Sparkles className="w-4 h-4" />
-                  <span className="text-sm font-bold">Growing Daily!</span>
+                  <span className="text-sm font-bold">{t('growingDaily')}</span>
                 </div>
               </div>
 
@@ -299,7 +307,7 @@ export function Hero() {
             onClick={() => scrollToSection('about')}
             className="flex flex-col items-center gap-2 text-warm-gray-500 hover:text-sunset-orange transition-colors group"
           >
-            <span className="text-sm font-medium group-hover:translate-y-[-2px] transition-transform">Discover More</span>
+            <span className="text-sm font-medium group-hover:translate-y-[-2px] transition-transform">{t('discoverMore')}</span>
             <ArrowDown className="w-5 h-5" />
           </button>
         </div>

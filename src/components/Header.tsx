@@ -1,11 +1,13 @@
 import { BookOpen, Menu, X, Heart, ChevronDown } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { LanguageToggle } from './LanguageToggle';
+import { useLanguage } from '../i18n';
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
+  const { t } = useLanguage();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -36,11 +38,11 @@ export function Header() {
   };
 
   const navItems = [
-    { id: 'about', label: 'Our Story' },
-    { id: 'mission', label: 'Mission' },
-    { id: 'impact', label: 'Impact' },
-    { id: 'programs', label: 'Programs' },
-    { id: 'get-involved', label: 'Get Involved' },
+    { id: 'about', label: t('ourStory') },
+    { id: 'mission', label: t('mission') },
+    { id: 'impact', label: t('impact') },
+    { id: 'programs', label: t('programs') },
+    { id: 'get-involved', label: t('getInvolved') },
   ];
 
   return (
@@ -74,7 +76,7 @@ export function Header() {
                 Bright Beginnings
               </span>
               <span className="block text-xs text-warm-gray-500 font-medium tracking-wide uppercase">
-                Books for Every Child
+                {t('booksForEveryChild')}
               </span>
             </div>
           </button>
@@ -107,7 +109,7 @@ export function Header() {
                 onClick={() => scrollToSection('contact')}
                 className="px-5 py-2.5 text-sm font-medium text-warm-gray-700 hover:text-sunset-orange transition-colors"
               >
-                Contact
+                {t('contact')}
               </button>
               <button
                 onClick={() => scrollToSection('get-involved')}
@@ -115,7 +117,7 @@ export function Header() {
               >
                 <span className="relative z-10 flex items-center gap-2">
                   <Heart className="w-4 h-4" />
-                  Donate Now
+                  {t('donateNow')}
                 </span>
                 <div className="absolute inset-0 bg-gradient-to-r from-sunset-coral to-sunset-pink opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </button>
@@ -161,14 +163,14 @@ export function Header() {
                 onClick={() => scrollToSection('contact')}
                 className="w-full px-4 py-3 rounded-xl text-base font-medium text-warm-gray-700 hover:bg-warm-gray-100 transition-colors text-left"
               >
-                Contact Us
+                {t('contactUsButton')}
               </button>
               <button
                 onClick={() => scrollToSection('get-involved')}
                 className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-sunset-orange to-sunset-coral text-white px-6 py-4 rounded-xl font-semibold shadow-lg shadow-sunset-orange/25"
               >
                 <Heart className="w-5 h-5" />
-                Make a Donation
+                {t('makeADonationMobile')}
               </button>
             </div>
           </div>

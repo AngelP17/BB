@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { BookOpen, Send, CheckCircle, School, Users, Calendar, MapPin } from 'lucide-react';
+import { useLanguage } from '../i18n';
 
 export function BookRequest() {
   const [formData, setFormData] = useState({
@@ -14,6 +15,7 @@ export function BookRequest() {
     message: '',
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const { t } = useLanguage();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,17 +38,17 @@ export function BookRequest() {
   };
 
   const organizationTypes = [
-    { value: 'school', label: 'School', icon: School },
-    { value: 'nonprofit', label: 'Nonprofit', icon: Users },
-    { value: 'community', label: 'Community Event', icon: Calendar },
-    { value: 'other', label: 'Other', icon: BookOpen },
+    { value: 'school', label: t('school'), icon: School },
+    { value: 'nonprofit', label: t('nonprofitType'), icon: Users },
+    { value: 'community', label: t('communityEvent'), icon: Calendar },
+    { value: 'other', label: t('other'), icon: BookOpen },
   ];
 
   const benefits = [
-    'Brand new books at no cost',
-    'Age-appropriate selections',
-    'Flexible delivery options',
-    'Support for your literacy goals',
+    t('brandNewBooksNoCost'),
+    t('ageAppropriateSelections'),
+    t('flexibleDelivery'),
+    t('supportForLiteracy'),
   ];
 
   return (
@@ -62,17 +64,16 @@ export function BookRequest() {
           <div>
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-sunset-orange/10 rounded-full mb-6">
               <BookOpen className="w-4 h-4 text-sunset-orange" />
-              <span className="text-sm font-semibold text-sunset-orange uppercase tracking-wide">Request Books</span>
+              <span className="text-sm font-semibold text-sunset-orange uppercase tracking-wide">{t('requestBooksTitle')}</span>
             </div>
 
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-warm-gray-900 mb-6">
-              Need Books for Your{' '}
-              <span className="text-gradient">Event or Program?</span>
+              {t('needBooksForEvent')}{' '}
+              <span className="text-gradient">{t('eventOrProgram')}</span>
             </h2>
 
             <p className="text-lg text-warm-gray-600 mb-8 leading-relaxed">
-              We allocate books from our monthly donation pool to schools, nonprofits, and community events.
-              Fill out the form and we'll do our best to support your literacy initiatives.
+              {t('bookRequestIntro')}
             </p>
 
             {/* Benefits */}
@@ -90,8 +91,7 @@ export function BookRequest() {
             {/* Note */}
             <div className="bg-golden-yellow/10 rounded-2xl p-6 border border-golden-yellow/20">
               <p className="text-warm-gray-700">
-                <span className="font-semibold text-warm-gray-900">Note:</span> Book availability depends on our current inventory and donation pool.
-                We'll contact you to confirm what we can provide for your event.
+                <span className="font-semibold text-warm-gray-900">{t('note')}</span> {t('bookAvailabilityNote')}
               </p>
             </div>
           </div>
@@ -103,9 +103,9 @@ export function BookRequest() {
                 <div className="w-20 h-20 bg-forest-green/10 rounded-full flex items-center justify-center mx-auto mb-6">
                   <CheckCircle className="w-10 h-10 text-forest-green" />
                 </div>
-                <h3 className="text-2xl font-bold text-warm-gray-900 mb-3">Request Submitted!</h3>
+                <h3 className="text-2xl font-bold text-warm-gray-900 mb-3">{t('requestSubmitted')}</h3>
                 <p className="text-warm-gray-600">
-                  We've received your request and will be in touch soon.
+                  {t('requestReceivedMessage')}
                 </p>
               </div>
             ) : (
@@ -113,7 +113,7 @@ export function BookRequest() {
                 {/* Organization Type */}
                 <div>
                   <label className="block text-sm font-semibold text-warm-gray-900 mb-3">
-                    Organization Type
+                    {t('organizationType')}
                   </label>
                   <div className="grid grid-cols-2 gap-3">
                     {organizationTypes.map((type) => {
@@ -123,11 +123,10 @@ export function BookRequest() {
                           key={type.value}
                           type="button"
                           onClick={() => setFormData({ ...formData, organizationType: type.value })}
-                          className={`flex items-center gap-3 p-4 rounded-xl border-2 transition-all duration-200 ${
-                            formData.organizationType === type.value
+                          className={`flex items-center gap-3 p-4 rounded-xl border-2 transition-all duration-200 ${formData.organizationType === type.value
                               ? 'border-sunset-orange bg-sunset-orange/5 text-sunset-orange'
                               : 'border-warm-gray-200 hover:border-warm-gray-300 text-warm-gray-700'
-                          }`}
+                            }`}
                         >
                           <Icon className="w-5 h-5" />
                           <span className="font-medium">{type.label}</span>
@@ -140,7 +139,7 @@ export function BookRequest() {
                 {/* Organization Name */}
                 <div>
                   <label htmlFor="organizationName" className="block text-sm font-semibold text-warm-gray-900 mb-2">
-                    Organization Name
+                    {t('organizationName')}
                   </label>
                   <input
                     type="text"
@@ -148,7 +147,7 @@ export function BookRequest() {
                     value={formData.organizationName}
                     onChange={(e) => setFormData({ ...formData, organizationName: e.target.value })}
                     className="w-full px-4 py-3 bg-white border border-warm-gray-200 rounded-xl focus:ring-2 focus:ring-sunset-orange/20 focus:border-sunset-orange outline-none transition-all"
-                    placeholder="Enter organization name"
+                    placeholder={t('enterOrganizationName')}
                     required
                   />
                 </div>
@@ -157,7 +156,7 @@ export function BookRequest() {
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
                     <label htmlFor="contactName" className="block text-sm font-semibold text-warm-gray-900 mb-2">
-                      Contact Name
+                      {t('contactName')}
                     </label>
                     <input
                       type="text"
@@ -165,13 +164,13 @@ export function BookRequest() {
                       value={formData.contactName}
                       onChange={(e) => setFormData({ ...formData, contactName: e.target.value })}
                       className="w-full px-4 py-3 bg-white border border-warm-gray-200 rounded-xl focus:ring-2 focus:ring-sunset-orange/20 focus:border-sunset-orange outline-none transition-all"
-                      placeholder="Your name"
+                      placeholder={t('yourNamePlaceholder')}
                       required
                     />
                   </div>
                   <div>
                     <label htmlFor="email" className="block text-sm font-semibold text-warm-gray-900 mb-2">
-                      Email
+                      {t('email')}
                     </label>
                     <input
                       type="email"
@@ -189,7 +188,7 @@ export function BookRequest() {
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
                     <label htmlFor="eventDate" className="block text-sm font-semibold text-warm-gray-900 mb-2">
-                      Event Date
+                      {t('eventDate')}
                     </label>
                     <input
                       type="date"
@@ -202,7 +201,7 @@ export function BookRequest() {
                   </div>
                   <div>
                     <label htmlFor="expectedChildren" className="block text-sm font-semibold text-warm-gray-900 mb-2">
-                      Expected # of Children
+                      {t('expectedChildren')}
                     </label>
                     <input
                       type="number"
@@ -219,7 +218,7 @@ export function BookRequest() {
                 {/* Address */}
                 <div>
                   <label htmlFor="address" className="block text-sm font-semibold text-warm-gray-900 mb-2">
-                    Event Location / Shipping Address
+                    {t('eventLocationAddress')}
                   </label>
                   <div className="relative">
                     <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-warm-gray-400" />
@@ -229,7 +228,7 @@ export function BookRequest() {
                       value={formData.address}
                       onChange={(e) => setFormData({ ...formData, address: e.target.value })}
                       className="w-full pl-12 pr-4 py-3 bg-white border border-warm-gray-200 rounded-xl focus:ring-2 focus:ring-sunset-orange/20 focus:border-sunset-orange outline-none transition-all"
-                      placeholder="Full address"
+                      placeholder={t('fullAddress')}
                       required
                     />
                   </div>
@@ -238,7 +237,7 @@ export function BookRequest() {
                 {/* Message */}
                 <div>
                   <label htmlFor="message" className="block text-sm font-semibold text-warm-gray-900 mb-2">
-                    Tell us about your event
+                    {t('tellUsAboutEvent')}
                   </label>
                   <textarea
                     id="message"
@@ -246,7 +245,7 @@ export function BookRequest() {
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     rows={4}
                     className="w-full px-4 py-3 bg-white border border-warm-gray-200 rounded-xl focus:ring-2 focus:ring-sunset-orange/20 focus:border-sunset-orange outline-none transition-all resize-none"
-                    placeholder="Describe your event and how books will be distributed..."
+                    placeholder={t('describeEvent')}
                   />
                 </div>
 
@@ -256,7 +255,7 @@ export function BookRequest() {
                   className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-sunset-orange to-sunset-coral text-white px-8 py-4 rounded-xl font-semibold shadow-lg shadow-sunset-orange/25 hover:shadow-xl hover:scale-[1.02] transition-all duration-300"
                 >
                   <Send className="w-5 h-5" />
-                  Submit Request
+                  {t('submitRequest')}
                 </button>
               </form>
             )}

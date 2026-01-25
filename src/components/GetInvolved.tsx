@@ -1,22 +1,25 @@
 import { Heart, Package, Clock, Share2, CreditCard, Mail, ArrowRight, CheckCircle, Facebook, Twitter, Linkedin } from 'lucide-react';
+import { useLanguage } from '../i18n';
 
 export function GetInvolved() {
+  const { t } = useLanguage();
+
   const ways = [
     {
       icon: CreditCard,
-      title: 'Donate Online',
-      description: 'Make a secure online donation to help us purchase brand new books for children in need.',
-      action: 'Donate Now',
+      title: t('donateOnline'),
+      description: t('donateOnlineDesc'),
+      action: t('donateNow'),
       color: 'from-sunset-orange to-sunset-coral',
       bgColor: 'bg-sunset-orange/10',
       iconColor: 'text-sunset-orange',
-      features: ['100% goes to books', 'Tax deductible', 'Secure payment'],
+      features: [t('goesToBooks'), t('taxDeductible'), t('securePayment')],
     },
     {
       icon: Mail,
-      title: 'Mail a Check',
-      description: 'Send a check to our Harrison, AR address. Every dollar helps put books in children\'s hands.',
-      action: 'Get Address',
+      title: t('mailACheck'),
+      description: t('mailACheckDesc'),
+      action: t('getAddress'),
       color: 'from-sky-blue to-ocean-teal',
       bgColor: 'bg-sky-blue/10',
       iconColor: 'text-sky-blue',
@@ -24,31 +27,31 @@ export function GetInvolved() {
     },
     {
       icon: Package,
-      title: 'Donate Books',
-      description: 'Have new or gently used children\'s books? We\'ll make sure they find a loving new home.',
-      action: 'Learn More',
+      title: t('donateBooks'),
+      description: t('donateBooksDesc'),
+      action: t('learnMore'),
       color: 'from-forest-green to-ocean-teal',
       bgColor: 'bg-forest-green/10',
       iconColor: 'text-forest-green',
-      features: ['New or like-new', 'Children\'s books', 'Drop-off or ship'],
+      features: [t('newOrLikeNew'), t('childrensBooks'), t('dropOffOrShip')],
     },
     {
       icon: Clock,
-      title: 'Volunteer',
-      description: 'Join our team of amazing volunteers who help sort books, organize events, and read with children.',
-      action: 'Get Involved',
+      title: t('volunteer'),
+      description: t('volunteerDesc'),
+      action: t('getInvolved'),
       color: 'from-sunset-pink to-mountain-purple',
       bgColor: 'bg-sunset-pink/10',
       iconColor: 'text-sunset-pink',
-      features: ['Flexible hours', 'Youth welcome', 'Make an impact'],
+      features: [t('flexibleHours'), t('youthWelcome'), t('makeAnImpact')],
     },
   ];
 
   const impactNumbers = [
-    { value: '$10', description: 'Provides 2-3 new books for a child' },
-    { value: '$25', description: 'Creates a mini home library' },
-    { value: '$50', description: 'Supports a classroom book corner' },
-    { value: '$100', description: 'Helps fund a community event' },
+    { value: '$10', description: t('provides2to3Books') },
+    { value: '$25', description: t('createsMiniLibrary') },
+    { value: '$50', description: t('supportsClassroom') },
+    { value: '$100', description: t('fundsCommunityEvent') },
   ];
 
   return (
@@ -62,15 +65,15 @@ export function GetInvolved() {
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-sunset-orange/10 rounded-full mb-6">
             <Heart className="w-4 h-4 text-sunset-orange" />
-            <span className="text-sm font-semibold text-sunset-orange uppercase tracking-wide">Get Involved</span>
+            <span className="text-sm font-semibold text-sunset-orange uppercase tracking-wide">{t('getInvolved')}</span>
           </div>
 
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-warm-gray-900 mb-6">
-            Help Us Spread the{' '}
-            <span className="text-gradient">Gift of Reading</span>
+            {t('getInvolvedTitle')}{' '}
+            <span className="text-gradient">{t('giftOfReading')}</span>
           </h2>
           <p className="text-lg text-warm-gray-600 max-w-2xl mx-auto">
-            There are many ways you can help bring the joy of reading to more children. Every contribution, big or small, makes a real difference!
+            {t('getInvolvedSubtitle')}
           </p>
         </div>
 
@@ -125,8 +128,8 @@ export function GetInvolved() {
         {/* Impact Numbers */}
         <div className="bg-gradient-to-r from-warm-gray-900 via-warm-gray-800 to-warm-gray-900 rounded-3xl p-8 md:p-12 mb-16">
           <div className="text-center mb-10">
-            <h3 className="text-2xl font-bold text-white mb-3">Your Donation at Work</h3>
-            <p className="text-warm-gray-400">See how your contribution directly impacts children's lives</p>
+            <h3 className="text-2xl font-bold text-white mb-3">{t('yourDonationAtWork')}</h3>
+            <p className="text-warm-gray-400">{t('donationImpactSubtitle')}</p>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
@@ -148,22 +151,22 @@ export function GetInvolved() {
 
           <div className="relative z-10 text-center">
             <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Ready to Make an Impact?
+              {t('readyToMakeImpact')}
             </h3>
             <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-              Your support today can help a child discover the magic of reading tomorrow. Every book is a new adventure waiting to be explored.
+              {t('impactCTAText')}
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button className="inline-flex items-center justify-center gap-2 bg-white text-sunset-orange px-8 py-4 rounded-full font-bold text-lg shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300">
                 <Heart className="w-5 h-5" />
-                Donate Now
+                {t('donateNow')}
               </button>
               <button
                 onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
                 className="inline-flex items-center justify-center gap-2 bg-white/20 backdrop-blur-sm text-white px-8 py-4 rounded-full font-semibold text-lg border border-white/30 hover:bg-white/30 transition-all duration-300"
               >
-                Contact Us
+                {t('contactUs')}
                 <ArrowRight className="w-5 h-5" />
               </button>
             </div>
@@ -172,15 +175,15 @@ export function GetInvolved() {
             <div className="mt-8 flex items-center justify-center gap-6 text-white/80 text-sm">
               <div className="flex items-center gap-2">
                 <CheckCircle className="w-4 h-4" />
-                <span>501(c)(3) Nonprofit</span>
+                <span>{t('nonprofit')}</span>
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle className="w-4 h-4" />
-                <span>Tax Deductible</span>
+                <span>{t('taxDeductible')}</span>
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle className="w-4 h-4" />
-                <span>100% Volunteer Run</span>
+                <span>{t('oneHundredPercentVolunteer')}</span>
               </div>
             </div>
           </div>
@@ -190,7 +193,7 @@ export function GetInvolved() {
         <div className="mt-12 text-center">
           <div className="inline-flex items-center gap-4">
             <Share2 className="w-5 h-5 text-warm-gray-400" />
-            <span className="text-warm-gray-600">Share our mission with your friends and family</span>
+            <span className="text-warm-gray-600">{t('shareOurMission')}</span>
             <div className="flex gap-2">
               <button
                 className="w-10 h-10 bg-warm-gray-100 rounded-full flex items-center justify-center hover:bg-sunset-orange hover:text-white transition-all duration-300 text-warm-gray-600"

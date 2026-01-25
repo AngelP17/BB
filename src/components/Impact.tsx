@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
-import { TrendingUp, MapPin, BookOpen, Users, Heart, Star, Award, Zap, ArrowRight, ChevronRight } from 'lucide-react';
+import { TrendingUp, MapPin, BookOpen, Users, Heart, Star, Award, Zap, ChevronRight } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
+import { useLanguage } from '../i18n';
 
 // Animated counter hook
 function useCountUp(end: number, duration: number = 2000) {
@@ -144,6 +145,7 @@ function AnimatedRing({
 function USMapVisualization() {
   const [isVisible, setIsVisible] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -285,11 +287,11 @@ function USMapVisualization() {
       <div className="flex items-center justify-center gap-6 mt-4 text-sm text-white/80">
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 bg-golden-yellow rounded-full shadow-lg" />
-          <span>Our Home Base</span>
+          <span>{t('ourHomeBase')}</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 bg-white/80 rounded-full" />
-          <span>States Reached</span>
+          <span>{t('statesReached')}</span>
         </div>
       </div>
     </div>
@@ -297,17 +299,19 @@ function USMapVisualization() {
 }
 
 export function Impact() {
+  const { t } = useLanguage();
+
   const stats = [
-    { value: 55000, maxValue: 60000, suffix: '+', label: 'Books Distributed', subtext: 'Brand new books given to children', icon: BookOpen, color: '#FBBF24' },
-    { value: 50, maxValue: 50, suffix: '+', label: 'States Reached', subtext: 'Across the entire nation', icon: MapPin, color: '#0EA5E9' },
-    { value: 13000, maxValue: 15000, suffix: '+', label: 'Children Helped', subtext: 'Lives touched by literacy', icon: Users, color: '#22C55E' },
-    { value: 100, maxValue: 100, suffix: '%', label: 'Volunteer Run', subtext: 'Community powered mission', icon: Heart, color: '#EC4899' },
+    { value: 55000, maxValue: 60000, suffix: '+', label: t('booksLabel'), subtext: t('booksDistributedStat').replace('55,000+ ', ''), icon: BookOpen, color: '#FBBF24' },
+    { value: 50, maxValue: 50, suffix: '+', label: t('statesReached'), subtext: t('acrossNation'), icon: MapPin, color: '#0EA5E9' },
+    { value: 13000, maxValue: 15000, suffix: '+', label: t('childrenHelped'), subtext: t('livesTouched'), icon: Users, color: '#22C55E' },
+    { value: 100, maxValue: 100, suffix: '%', label: t('volunteerRun'), subtext: t('communityPoweredMission'), icon: Heart, color: '#EC4899' },
   ];
 
   const achievements = [
-    { icon: Award, title: 'Youth-Founded', description: 'Started by a student in middle school', stat: '2019' },
-    { icon: Star, title: 'National Reach', description: 'Books sent to all 50 states', stat: '50+' },
-    { icon: Zap, title: 'Growing Daily', description: 'Expanding globally every day', stat: '100+' },
+    { icon: Award, title: t('youthFounded'), description: t('youthFoundedDesc'), stat: '2019' },
+    { icon: Star, title: t('nationalReach'), description: t('nationalReachDesc'), stat: '50+' },
+    { icon: Zap, title: t('growingDailyTitle'), description: t('growingDailyDesc'), stat: '100+' },
   ];
 
   return (
@@ -329,21 +333,21 @@ export function Impact() {
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full mb-6">
             <TrendingUp className="w-4 h-4 text-white" />
-            <span className="text-sm font-semibold text-white uppercase tracking-wide">Our Impact</span>
+            <span className="text-sm font-semibold text-white uppercase tracking-wide">{t('ourImpact')}</span>
           </div>
 
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
-            Making a <span className="text-golden-yellow">Real Difference</span>
+            {t('makingADifference')} <span className="text-golden-yellow">{t('realDifference')}</span>
           </h2>
           <p className="text-lg sm:text-xl text-white/90 max-w-2xl mx-auto">
-            Through your support, we're transforming lives and creating lasting change in communities across the nation.
+            {t('impactSubtitle')}
           </p>
         </div>
 
         {/* Stats Grid with Ring Charts */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
           {stats.map((stat, index) => {
-            const { count, ref, hasStarted } = useCountUp(stat.value, 2500);
+            const { count, ref } = useCountUp(stat.value, 2500);
             const Icon = stat.icon;
             return (
               <div
@@ -384,18 +388,18 @@ export function Impact() {
           <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
             <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
               <MapPin className="w-5 h-5" />
-              Our Nationwide Reach
+              {t('nationwideReach')}
             </h3>
             <USMapVisualization />
             <p className="text-white/70 text-sm mt-4">
-              From our home base in Harrison, Arkansas, we've distributed books to children in every state across the nation.
+              {t('fromHomeBase')}
             </p>
           </div>
 
           {/* Achievements & Images */}
           <div className="space-y-6">
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
-              <h3 className="text-xl font-bold text-white mb-6">What Makes Us Different</h3>
+              <h3 className="text-xl font-bold text-white mb-6">{t('whatMakesUsDifferent')}</h3>
 
               <div className="space-y-4">
                 {achievements.map((achievement, index) => {
@@ -442,7 +446,7 @@ export function Impact() {
             onClick={() => document.getElementById('get-involved')?.scrollIntoView({ behavior: 'smooth' })}
             className="group inline-flex items-center gap-3 bg-white text-sunset-orange font-semibold px-8 py-4 rounded-full hover:bg-golden-yellow hover:text-warm-gray-900 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
           >
-            Join Our Mission
+            {t('joinOurMission')}
             <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </button>
         </div>

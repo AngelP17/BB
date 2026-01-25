@@ -11,15 +11,17 @@ import { GetInvolved } from './components/GetInvolved';
 import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
 import { ArrowUp, BookOpen } from 'lucide-react';
+import { useLanguage } from './i18n';
 
 // Skip to content link for accessibility
 function SkipToContent() {
+  const { t } = useLanguage();
   return (
     <a
       href="#main-content"
       className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-6 focus:py-3 focus:bg-sunset-orange focus:text-white focus:rounded-lg focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-sunset-coral focus:ring-offset-2 transition-all"
     >
-      Skip to main content
+      {t('skipToMainContent')}
     </a>
   );
 }
@@ -67,12 +69,14 @@ function BackToTop() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const { t } = useLanguage();
+
   return (
     <button
       onClick={scrollToTop}
       className={`fixed bottom-8 right-8 z-40 w-12 h-12 bg-gradient-to-r from-sunset-orange to-sunset-coral text-white rounded-full shadow-lg shadow-sunset-orange/25 hover:shadow-xl hover:scale-110 transition-all duration-300 flex items-center justify-center ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
         }`}
-      aria-label="Back to top"
+      aria-label={t('backToTop')}
     >
       <ArrowUp className="w-5 h-5" />
     </button>
@@ -97,6 +101,18 @@ function FloatingBooks() {
           <BookOpen className="w-16 h-16 text-sunset-orange" />
         </div>
       ))}
+    </div>
+  );
+}
+
+// Speech bubble component for mascot
+function SpeechBubble({ isWaving }: { isWaving: boolean }) {
+  const { t } = useLanguage();
+  return (
+    <div className={`absolute -top-16 left-1/2 -translate-x-1/2 bg-white px-4 py-2 rounded-xl shadow-lg whitespace-nowrap transition-all duration-300 ${isWaving ? 'opacity-100 scale-100' : 'opacity-0 scale-90'
+      }`}>
+      <span className="text-sm font-medium text-warm-gray-700">{t('keepReading')}</span>
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-3 h-3 bg-white rotate-45" />
     </div>
   );
 }
@@ -133,11 +149,7 @@ function Mascot() {
     >
       <div className="relative group cursor-pointer" onClick={() => setIsWaving(true)}>
         {/* Speech bubble */}
-        <div className={`absolute -top-16 left-1/2 -translate-x-1/2 bg-white px-4 py-2 rounded-xl shadow-lg whitespace-nowrap transition-all duration-300 ${isWaving ? 'opacity-100 scale-100' : 'opacity-0 scale-90'
-          }`}>
-          <span className="text-sm font-medium text-warm-gray-700">Keep reading! 📚</span>
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-3 h-3 bg-white rotate-45" />
-        </div>
+        <SpeechBubble isWaving={isWaving} />
 
         {/* Mascot image */}
         <div className={`w-20 h-20 rounded-full overflow-hidden shadow-xl border-4 border-white transition-transform duration-300 hover:scale-110 ${isWaving ? 'animate-bounce-gentle' : ''

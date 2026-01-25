@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { BookMarked, Home, School, Gift, TreePine, Calendar, Users, Shield, ArrowRight, ChevronRight, Sparkles } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
+import { useLanguage } from '../i18n';
 
 // Scroll reveal hook
 function useScrollReveal(threshold: number = 0.2) {
@@ -33,50 +34,51 @@ export function Programs() {
   const { isVisible: headerVisible, ref: headerRef } = useScrollReveal(0.3);
   const { isVisible: programsVisible, ref: programsRef } = useScrollReveal(0.2);
   const { isVisible: specialVisible, ref: specialRef } = useScrollReveal(0.3);
+  const { t } = useLanguage();
 
   const programs = [
     {
       icon: School,
-      title: 'School Book Drives',
-      description: 'We partner with local schools to ensure every classroom has a diverse, engaging library that inspires young readers and supports teachers.',
+      title: t('schoolBookDrives'),
+      description: t('schoolBookDrivesDesc'),
       color: 'from-sky-blue to-ocean-teal',
       bgColor: 'bg-sky-blue/10',
       iconColor: 'text-sky-blue',
-      features: ['Classroom libraries', 'Teacher resources', 'Reading corners'],
-      impact: '200+ Schools',
+      features: [t('classroomLibraries'), t('teacherResources'), t('readingCorners')],
+      impact: `200+ ${t('schools')}`,
       image: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=400',
     },
     {
       icon: Home,
-      title: 'Home Libraries',
-      description: 'Building personal libraries for families by providing book collections that children can call their own and treasure forever.',
+      title: t('homeLibraries'),
+      description: t('homeLibrariesDesc'),
       color: 'from-sunset-orange to-sunset-coral',
       bgColor: 'bg-sunset-orange/10',
       iconColor: 'text-sunset-orange',
-      features: ['Family book sets', 'Age-appropriate selections', 'Reading guides'],
-      impact: '5,000+ Homes',
+      features: [t('familyBookSets'), t('ageAppropriateSelections'), t('readingGuides')],
+      impact: `5,000+ ${t('homes')}`,
       image: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=400',
     },
     {
       icon: BookMarked,
-      title: 'Reading Programs',
-      description: 'Interactive reading sessions and literacy programs that help children develop a lifelong love of reading through fun activities.',
+      title: t('readingPrograms'),
+      description: t('readingProgramsDesc'),
       color: 'from-sunset-pink to-mountain-purple',
       bgColor: 'bg-sunset-pink/10',
       iconColor: 'text-sunset-pink',
-      features: ['Reading in the Park', 'Story time events', 'Literacy workshops'],
-      impact: '100+ Events',
+      features: [t('readingInPark'), t('storyTimeEvents'), t('literacyWorkshops')],
+      impact: `100+ ${t('events')}`,
       image: 'https://images.unsplash.com/photo-1529390079861-591f6a5c2dc1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=400',
     },
     {
       icon: Gift,
-      title: 'Book Giveaways',
-      description: 'Community events where children can select their own books to take home, making reading a personal and exciting experience.',
+      title: t('bookGiveaways'),
+      description: t('bookGiveawaysDesc'),
       color: 'from-forest-green to-ocean-teal',
       bgColor: 'bg-forest-green/10',
       iconColor: 'text-forest-green',
-      features: ['Holiday events', 'Community fairs', 'School visits'],
-      impact: '55,000+ Books',
+      features: [t('holidayEvents'), t('communityFairs'), t('schoolVisits')],
+      impact: `55,000+ ${t('books')}`,
       image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=400',
     },
   ];
@@ -84,27 +86,27 @@ export function Programs() {
   const specialPrograms = [
     {
       icon: Shield,
-      title: 'Crisis Support',
-      description: 'Working with Arkansas State Police to provide comfort books for children in crisis situations. These books offer solace during difficult times.',
+      title: t('crisisSupport'),
+      description: t('crisisSupportDesc'),
       image: '/images/children_learning_books.png',
       stat: '1,000+',
-      statLabel: 'Children comforted',
+      statLabel: t('childrenComforted'),
     },
     {
       icon: Calendar,
-      title: 'Christmas Giveaway',
-      description: 'Annual holiday events where volunteers help children select free books as special gifts. A magical experience for families in need.',
+      title: t('christmasGiveaway'),
+      description: t('christmasGiveawayDesc'),
       image: '/images/kids.jpeg',
       stat: '5,000+',
-      statLabel: 'Holiday books given',
+      statLabel: t('holidayBooksGiven'),
     },
     {
       icon: TreePine,
-      title: 'Reading in the Park',
-      description: 'Partnership with Boone County Imagination Library for outdoor reading sessions. Bringing stories to life in nature.',
+      title: t('readingInParkTitle'),
+      description: t('readingInParkDesc'),
       image: '/images/addie&kid.jpeg',
       stat: '50+',
-      statLabel: 'Outdoor events',
+      statLabel: t('outdoorEvents'),
     },
   ];
 
@@ -119,14 +121,14 @@ export function Programs() {
         <div ref={headerRef} className={`text-center mb-16 transition-all duration-700 ${headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow-lg shadow-warm-gray-900/5 mb-6">
             <BookMarked className="w-4 h-4 text-sunset-orange" />
-            <span className="text-sm font-semibold text-warm-gray-700">Our Programs</span>
+            <span className="text-sm font-semibold text-warm-gray-700">{t('ourPrograms')}</span>
           </div>
 
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-warm-gray-900 mb-6">
-            How We <span className="text-gradient">Spread the Joy</span>
+            {t('howWeSpreadJoy')} <span className="text-gradient">{t('spreadTheJoy')}</span>
           </h2>
           <p className="text-lg text-warm-gray-600 max-w-2xl mx-auto">
-            We reach children through multiple initiatives designed to make books accessible and reading exciting for everyone.
+            {t('programsSubtitle')}
           </p>
         </div>
 
@@ -227,7 +229,7 @@ export function Programs() {
             <div className="p-8 md:p-12">
               <div className="flex items-center gap-2 mb-6">
                 <Sparkles className="w-5 h-5 text-sunset-orange" />
-                <h3 className="text-2xl font-bold text-warm-gray-900">Special Initiatives</h3>
+                <h3 className="text-2xl font-bold text-warm-gray-900">{t('specialInitiatives')}</h3>
               </div>
 
               <div className="space-y-4">
@@ -270,13 +272,13 @@ export function Programs() {
         <div className="mt-12 text-center">
           <div className="inline-flex flex-col sm:flex-row gap-4 items-center">
             <p className="text-warm-gray-600">
-              Need books for your school or event?
+              {t('needBooksForSchool')}
             </p>
             <button
               onClick={() => document.getElementById('book-request')?.scrollIntoView({ behavior: 'smooth' })}
               className="group inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-sunset-orange to-sunset-coral text-white font-semibold rounded-full shadow-lg shadow-sunset-orange/25 hover:shadow-xl hover:scale-105 transition-all duration-300"
             >
-              Request Books
+              {t('requestBooks')}
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </button>
           </div>

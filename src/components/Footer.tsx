@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { Instagram, Facebook, Mail, Heart, ArrowRight, MapPin, Send } from 'lucide-react';
+import { useLanguage } from '../i18n';
 
 export function Footer() {
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
+  const { t } = useLanguage();
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
@@ -20,18 +22,18 @@ export function Footer() {
   };
 
   const quickLinks = [
-    { label: 'Our Story', id: 'about' },
-    { label: 'Mission', id: 'mission' },
-    { label: 'Programs', id: 'programs' },
-    { label: 'Impact', id: 'impact' },
-    { label: 'Get Involved', id: 'get-involved' },
-    { label: 'Request Books', id: 'book-request' },
+    { label: t('ourStory'), id: 'about' },
+    { label: t('mission'), id: 'mission' },
+    { label: t('programs'), id: 'programs' },
+    { label: t('impact'), id: 'impact' },
+    { label: t('getInvolved'), id: 'get-involved' },
+    { label: t('requestBooks'), id: 'book-request' },
   ];
 
   const supportLinks = [
-    { label: 'Donate', id: 'get-involved' },
-    { label: 'Volunteer', id: 'get-involved' },
-    { label: 'Contact Us', id: 'contact' },
+    { label: t('donateNow'), id: 'get-involved' },
+    { label: t('volunteer'), id: 'get-involved' },
+    { label: t('contactUs'), id: 'contact' },
   ];
 
   return (
@@ -48,17 +50,17 @@ export function Footer() {
             <div className="grid md:grid-cols-2 gap-8 items-center">
               <div>
                 <h3 className="text-2xl md:text-3xl font-bold text-white mb-3">
-                  Stay Connected
+                  {t('stayConnected')}
                 </h3>
                 <p className="text-white/90">
-                  Get updates on our book drives, events, and impact stories delivered to your inbox.
+                  {t('newsletterSubtitle')}
                 </p>
               </div>
 
               <div>
                 {subscribed ? (
                   <div className="bg-white/20 backdrop-blur-sm rounded-xl p-4 text-center">
-                    <p className="text-white font-semibold">Thanks for subscribing!</p>
+                    <p className="text-white font-semibold">{t('thanksForSubscribing')}</p>
                   </div>
                 ) : (
                   <form onSubmit={handleNewsletterSubmit} className="flex gap-3">
@@ -66,7 +68,7 @@ export function Footer() {
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="Enter your email"
+                      placeholder={t('enterYourEmail')}
                       className="flex-1 px-5 py-4 bg-white/20 backdrop-blur-sm border border-white/30 rounded-xl text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50"
                       required
                     />
@@ -75,7 +77,7 @@ export function Footer() {
                       className="px-6 py-4 bg-white text-sunset-orange rounded-xl font-semibold hover:bg-golden-yellow hover:text-warm-gray-900 transition-all duration-300 flex items-center gap-2"
                     >
                       <Send className="w-5 h-5" />
-                      <span className="hidden sm:inline">Subscribe</span>
+                      <span className="hidden sm:inline">{t('subscribe')}</span>
                     </button>
                   </form>
                 )}
@@ -103,12 +105,12 @@ export function Footer() {
               </div>
               <div className="text-left">
                 <span className="text-xl font-bold text-white block">Bright Beginnings</span>
-                <span className="text-sm text-sunset-orange/80">Books for Every Child</span>
+                <span className="text-sm text-sunset-orange/80">{t('booksForEveryChild')}</span>
               </div>
             </button>
 
             <p className="text-warm-gray-300 mb-6 leading-relaxed max-w-md">
-              Spreading the love of reading all over the state and around the world by providing access and creating enthusiasm for books.
+              {t('footerMission')}
             </p>
 
             {/* Social Links & Mascot */}
@@ -146,14 +148,14 @@ export function Footer() {
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <span className="text-xs text-golden-yellow font-medium hidden sm:block">Our Mascot!</span>
+                <span className="text-xs text-golden-yellow font-medium hidden sm:block">{t('ourMascot')}</span>
               </div>
             </div>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h4 className="font-semibold text-sunset-orange mb-5">Explore</h4>
+            <h4 className="font-semibold text-sunset-orange mb-5">{t('explore')}</h4>
             <ul className="space-y-3">
               {quickLinks.map((link, index) => (
                 <li key={index}>
@@ -171,7 +173,7 @@ export function Footer() {
 
           {/* Support */}
           <div>
-            <h4 className="font-semibold text-sunset-orange mb-5">Support</h4>
+            <h4 className="font-semibold text-sunset-orange mb-5">{t('support')}</h4>
             <ul className="space-y-3">
               {supportLinks.map((link, index) => (
                 <li key={index}>
@@ -205,11 +207,11 @@ export function Footer() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-warm-gray-400 text-sm text-center md:text-left">
-              &copy; {new Date().getFullYear()} Bright Beginnings Books. All rights reserved.
+              &copy; {new Date().getFullYear()} Bright Beginnings Books. {t('allRightsReserved')}
             </p>
 
             <div className="flex items-center gap-2 text-warm-gray-400 text-sm">
-              <span className="text-sunset-orange font-medium">501(c)(3) Nonprofit</span>
+              <span className="text-sunset-orange font-medium">{t('nonprofit')}</span>
               <span className="text-sunset-orange/50">|</span>
               <span>EIN: 86-2430919</span>
             </div>

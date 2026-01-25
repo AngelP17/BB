@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Quote, Heart, BookOpen, GraduationCap, Award, Sparkles, MapPin, Calendar, ArrowRight } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
+import { useLanguage } from '../i18n';
 
 // Scroll progress hook for timeline
 function useScrollProgress() {
@@ -61,6 +62,7 @@ export function FounderStory() {
   const { progress, ref: timelineRef } = useScrollProgress();
   const [activeIndex, setActiveIndex] = useState(0);
   const [hoveredMilestone, setHoveredMilestone] = useState<number | null>(null);
+  const { t } = useLanguage();
 
   // Update active index based on scroll progress
   useEffect(() => {
@@ -71,30 +73,30 @@ export function FounderStory() {
   const milestones = [
     {
       year: '2019',
-      period: 'Middle School',
-      title: 'A Dream Begins',
-      description: 'Addie Elizabeth Jones, an avid reader since childhood, starts Bright Beginnings Books with a simple mission: share her love of reading with every child who needs it.',
+      period: t('middleSchool'),
+      title: t('aDreamBegins'),
+      description: t('dreamBeginsDesc'),
       icon: BookOpen,
       image: '/images/addie&books.jpeg',
-      stats: { books: '500+', reach: 'Local' },
+      stats: { books: '500+', reach: t('local') },
     },
     {
       year: '2021',
-      period: 'High School',
-      title: 'Growing Impact',
-      description: 'The organization expands from local school visits to reaching children across Arkansas and beyond. Partnerships with schools and community centers flourish.',
+      period: t('highSchool'),
+      title: t('growingImpact'),
+      description: t('growingImpactDesc'),
       icon: Heart,
       image: '/images/addie&kid.jpeg',
-      stats: { books: '10,000+', reach: 'Statewide' },
+      stats: { books: '10,000+', reach: t('statewide') },
     },
     {
       year: '2024',
-      period: 'Today',
-      title: '55,000+ Books',
-      description: 'Now reaching all 50 states and multiple countries, Bright Beginnings Books continues to grow every day, touching the lives of thousands of children.',
+      period: t('today'),
+      title: t('booksCount55k'),
+      description: t('booksCount55kDesc'),
       icon: Award,
       image: '/images/addie&baby.jpeg',
-      stats: { books: '55,000+', reach: 'Nationwide' },
+      stats: { books: '55,000+', reach: t('nationwide') },
     },
   ];
 
@@ -114,14 +116,14 @@ export function FounderStory() {
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-sunset-orange/10 rounded-full mb-6">
             <Sparkles className="w-4 h-4 text-sunset-orange" />
-            <span className="text-sm font-semibold text-sunset-orange uppercase tracking-wide">Our Story</span>
+            <span className="text-sm font-semibold text-sunset-orange uppercase tracking-wide">{t('ourStoryLabel')}</span>
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-warm-gray-900 mb-6">
-            Started by a Student,{' '}
-            <span className="text-gradient">Changing Lives</span>
+            {t('founderTitle')}{' '}
+            <span className="text-gradient">{t('founderTitleHighlight')}</span>
           </h2>
           <p className="text-lg text-warm-gray-600 max-w-2xl mx-auto">
-            What began as one student's passion project has grown into a movement reaching children across the nation.
+            {t('founderSubtitle')}
           </p>
         </div>
 
@@ -142,7 +144,7 @@ export function FounderStory() {
                 <div className="absolute bottom-0 left-0 right-0 p-8">
                   <Quote className="w-10 h-10 text-white/40 mb-3" />
                   <p className="text-white text-lg font-medium italic leading-relaxed">
-                    "My goal is to spread the love of reading all over the state and around the world by providing access and creating enthusiasm for books."
+                    {t('founderQuote')}
                   </p>
                   <div className="mt-4 flex items-center gap-3">
                     <div className="w-12 h-12 bg-gradient-to-br from-sunset-orange to-sunset-coral rounded-full flex items-center justify-center shadow-lg">
@@ -150,7 +152,7 @@ export function FounderStory() {
                     </div>
                     <div>
                       <p className="text-white font-semibold">Addie Elizabeth Jones</p>
-                      <p className="text-white/70 text-sm">Founder, Bright Beginnings Books</p>
+                      <p className="text-white/70 text-sm">{t('founder')}</p>
                     </div>
                   </div>
                 </div>
@@ -162,15 +164,15 @@ export function FounderStory() {
                   <MapPin className="w-6 h-6 text-golden-yellow" />
                 </div>
                 <div>
-                  <p className="font-bold text-warm-gray-900">Harrison, AR</p>
-                  <p className="text-sm text-warm-gray-500">Where it all began</p>
+                  <p className="font-bold text-warm-gray-900">{t('harrisonAR')}</p>
+                  <p className="text-sm text-warm-gray-500">{t('whereItAllBegan')}</p>
                 </div>
               </div>
 
               {/* Year Badge */}
               <div className="absolute -bottom-4 -left-4 bg-gradient-to-r from-sunset-orange to-sunset-coral p-3 rounded-xl shadow-xl hidden md:flex items-center gap-2 text-white">
                 <Calendar className="w-5 h-5" />
-                <span className="font-bold">Since 2019</span>
+                <span className="font-bold">{t('since')} 2019</span>
               </div>
             </div>
           </div>
@@ -179,10 +181,10 @@ export function FounderStory() {
           <div className="space-y-8" ref={timelineRef}>
             <div className="space-y-4">
               <h3 className="text-2xl font-bold text-warm-gray-900">
-                From Classroom to Nationwide
+                {t('fromClassroomToNationwide')}
               </h3>
               <p className="text-warm-gray-600 leading-relaxed">
-                Addie Elizabeth Jones has been an avid reader for as long as she can remember. Books have always been an important part of her life, which is why she started Bright Beginnings Books while still in middle school.
+                {t('founderBio')}
               </p>
             </div>
 
@@ -233,11 +235,11 @@ export function FounderStory() {
                         <div className="flex gap-4 pt-2">
                           <div className="px-3 py-2 bg-sunset-orange/10 rounded-lg">
                             <div className="text-lg font-bold text-sunset-orange">{milestone.stats.books}</div>
-                            <div className="text-xs text-warm-gray-500">Books</div>
+                            <div className="text-xs text-warm-gray-500">{t('books')}</div>
                           </div>
                           <div className="px-3 py-2 bg-sky-blue/10 rounded-lg">
                             <div className="text-lg font-bold text-sky-blue">{milestone.stats.reach}</div>
-                            <div className="text-xs text-warm-gray-500">Reach</div>
+                            <div className="text-xs text-warm-gray-500">{t('reach')}</div>
                           </div>
                         </div>
                       </div>
@@ -263,7 +265,7 @@ export function FounderStory() {
                 href="#mission"
                 className="group inline-flex items-center gap-2 text-sunset-orange font-semibold hover:gap-4 transition-all duration-300"
               >
-                Discover Our Mission
+                {t('discoverOurMission')}
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </a>
             </div>
@@ -279,10 +281,10 @@ export function FounderStory() {
 
           <div className="relative grid grid-cols-2 md:grid-cols-4 gap-8">
             {[
-              { value: '501(c)(3)', label: 'Registered Nonprofit', sublabel: 'EIN: 86-2430919', delay: 0 },
-              { value: '2019', label: 'Year Founded', sublabel: 'In Harrison, AR', delay: 100 },
-              { value: '100%', label: 'Volunteer Run', sublabel: 'Community powered', delay: 200 },
-              { value: '50+', label: 'States Reached', sublabel: 'And growing', delay: 300 },
+              { value: '501(c)(3)', label: t('registeredNonprofit'), sublabel: 'EIN: 86-2430919', delay: 0 },
+              { value: '2019', label: t('yearFounded'), sublabel: t('inHarrisonAR'), delay: 100 },
+              { value: '100%', label: t('volunteerRun'), sublabel: t('communityPowered'), delay: 200 },
+              { value: '50+', label: t('statesReached'), sublabel: t('andGrowing'), delay: 300 },
             ].map((stat, index) => (
               <div
                 key={index}

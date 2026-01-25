@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { BookOpen, Heart, Users, Sparkles, Target, Lightbulb, Globe, Rocket, ArrowRight, CheckCircle2 } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
+import { useLanguage } from '../i18n';
 
 // Scroll-triggered animation hook
 function useScrollReveal(threshold: number = 0.2) {
@@ -32,67 +33,68 @@ export function Mission() {
   const { isVisible: headerVisible, ref: headerRef } = useScrollReveal(0.3);
   const { isVisible: valuesVisible, ref: valuesRef } = useScrollReveal(0.2);
   const { isVisible: pillarsVisible, ref: pillarsRef } = useScrollReveal(0.3);
+  const { t } = useLanguage();
 
   const values = [
     {
       icon: BookOpen,
-      title: 'Literacy for All',
-      description: 'Every child deserves access to books that spark imagination and ignite a lifelong love of learning.',
+      title: t('literacyForAll'),
+      description: t('literacyForAllDesc'),
       color: 'from-sunset-orange to-sunset-coral',
       bgColor: 'bg-sunset-orange/10',
       iconColor: 'text-sunset-orange',
-      stats: '55,000+ books distributed',
+      stats: t('booksDistributedStat'),
     },
     {
       icon: Heart,
-      title: 'Community Love',
-      description: 'Building stronger communities through the transformative power of reading and shared stories.',
+      title: t('communityLove'),
+      description: t('communityLoveDesc'),
       color: 'from-sunset-pink to-mountain-purple',
       bgColor: 'bg-sunset-pink/10',
       iconColor: 'text-sunset-pink',
-      stats: '100+ community events',
+      stats: t('communityEvents'),
     },
     {
       icon: Users,
-      title: 'Together We Grow',
-      description: 'Partnering with families, schools, and volunteers to reach more children every single day.',
+      title: t('togetherWeGrow'),
+      description: t('togetherWeGrowDesc'),
       color: 'from-sky-blue to-ocean-teal',
       bgColor: 'bg-sky-blue/10',
       iconColor: 'text-sky-blue',
-      stats: '500+ volunteers',
+      stats: t('volunteers'),
     },
     {
       icon: Sparkles,
-      title: 'Bright Futures',
-      description: 'Creating opportunities for children to discover their potential through the magic of reading.',
+      title: t('brightFutures'),
+      description: t('brightFuturesDesc'),
       color: 'from-golden-yellow to-warm-amber',
       bgColor: 'bg-golden-yellow/10',
       iconColor: 'text-golden-yellow',
-      stats: '13,000+ children helped',
+      stats: t('childrenHelpedStat'),
     },
   ];
 
   const pillars = [
     {
       icon: Target,
-      title: 'Distribution',
-      description: 'Getting as many new children\'s books as possible into the hands of families, teachers, and organizations.',
+      title: t('distribution'),
+      description: t('distributionDesc'),
       image: 'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=400',
-      highlights: ['Brand new books', 'Age-appropriate', 'Free to all'],
+      highlights: [t('brandNewBooks'), t('ageAppropriate'), t('freeToAll')],
     },
     {
       icon: Lightbulb,
-      title: 'Education',
-      description: 'Teaching parents and caregivers how early reading affects brain development and school readiness.',
+      title: t('education'),
+      description: t('educationDesc'),
       image: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=400',
-      highlights: ['Parent resources', 'Reading guides', 'Development tips'],
+      highlights: [t('parentResources'), t('readingGuides'), t('developmentTips')],
     },
     {
       icon: Rocket,
-      title: 'Engagement',
-      description: 'Creating events that show children reading is magical and fun—not just homework.',
+      title: t('engagement'),
+      description: t('engagementDesc'),
       image: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=400',
-      highlights: ['Reading events', 'Story time', 'Community fairs'],
+      highlights: [t('readingEvents'), t('storyTime'), t('communityFairs')],
     },
   ];
 
@@ -109,13 +111,13 @@ export function Mission() {
           <div className={`transition-all duration-700 ${headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow-lg shadow-warm-gray-900/5 mb-6">
               <Target className="w-4 h-4 text-sunset-orange" />
-              <span className="text-sm font-semibold text-warm-gray-700">Our Mission</span>
+              <span className="text-sm font-semibold text-warm-gray-700">{t('ourMission')}</span>
             </div>
 
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-warm-gray-900 mb-6 leading-tight">
-              Spreading the{' '}
+              {t('spreadingLoveOfReading')}{' '}
               <span className="relative inline-block">
-                <span className="text-gradient">Love of Reading</span>
+                <span className="text-gradient">{t('loveOfReading')}</span>
                 <svg className="absolute -bottom-2 left-0 w-full" viewBox="0 0 200 8" fill="none">
                   <path d="M1 5.5C47 2 153 2 199 5.5" stroke="url(#underline-gradient)" strokeWidth="3" strokeLinecap="round" />
                   <defs>
@@ -126,12 +128,11 @@ export function Mission() {
                   </defs>
                 </svg>
               </span>{' '}
-              Everywhere
+              {t('everywhere')}
             </h2>
 
             <p className="text-lg sm:text-xl text-warm-gray-600 leading-relaxed max-w-3xl mx-auto">
-              At Bright Beginnings Books, we're dedicated to putting books in the hands of children who need them most.
-              We believe literacy is the foundation of success, and every child deserves the opportunity to discover the joy of reading.
+              {t('missionMainText')}
             </p>
           </div>
         </div>
@@ -181,10 +182,10 @@ export function Mission() {
         <div ref={pillarsRef} className={`bg-gradient-to-br from-warm-gray-900 via-warm-gray-800 to-warm-gray-900 rounded-3xl p-8 md:p-12 lg:p-16 transition-all duration-1000 ${pillarsVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
           <div className="text-center mb-12">
             <h3 className="text-2xl sm:text-3xl font-bold text-white mb-4">
-              Our Three Pillars of Impact
+              {t('threePillarsOfImpact')}
             </h3>
             <p className="text-warm-gray-400 max-w-2xl mx-auto">
-              We focus on three core areas to maximize our impact and ensure every child has access to the gift of reading.
+              {t('threePillarsDesc')}
             </p>
           </div>
 
@@ -258,7 +259,7 @@ export function Mission() {
               </div>
             </div>
             <p className="text-center text-warm-gray-500 mt-4 text-sm">
-              Reaching children in all 50 states and around the world
+              {t('reachingChildrenWorldwide')}
             </p>
           </div>
         </div>
@@ -269,7 +270,7 @@ export function Mission() {
             href="#programs"
             className="group inline-flex items-center gap-2 text-sunset-orange font-semibold text-lg hover:gap-4 transition-all duration-300"
           >
-            Explore Our Programs
+            {t('exploreOurPrograms')}
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </a>
         </div>
